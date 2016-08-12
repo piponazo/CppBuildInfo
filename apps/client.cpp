@@ -2,21 +2,31 @@
 #include <QProcess>
 #include <QStringList>
 #include <QTime>
+#include <QTextStream>
+#include <QFile>
+#include <QDebug>
 
 #include <iostream>
 
 using namespace std;
+
+static QString outputFile;
+static QString sourceFile;
+
+static void processOptions(QStringList &args);
+static void getSourceFile(const QStringList &chunks);
 
 int main (int argc, char **argv)
 {
     const int maxTimeInMsecs = 30000;
     QCoreApplication app (argc, argv);
     QStringList args = app.arguments();
-    cout << "Hello world: Client!" << endl;
-    cout << "N Args: " << argc << endl;
-    args.removeFirst();
+
+    processOptions(args);
+    getSourceFile(args);
     QString argsTogeter = args.join(" ");
-    cout << "Args: " << argsTogeter.toStdString() << endl;
+
+    qDebug() << "app: " << argsTogeter;
 
     QProcess process;
     process.setProcessChannelMode(QProcess::ForwardedChannels);
@@ -25,15 +35,41 @@ int main (int argc, char **argv)
     process.start(argsTogeter);
     if (process.waitForFinished(maxTimeInMsecs) == false) {
         cerr << "application timeout" << endl;
-
+        return EXIT_FAILURE;
     }
     QTime endTime = QTime::currentTime();
+    const int msecs = startTime.msecsTo(endTime);
 
-    cout << "Application finished correctly" << endl;
-    cout << "Time: " << startTime.msecsTo(endTime) << "msecs" << endl;
-    // The idea for the client application would be the following (idea taken from GNU time command):
-    // - Parse the command line
-    // - Start the measure
-    // - Run command (Use QProcess with the objective to be platform independent)
-    // - Stop the measure
+    if (outputFile.isEmpty()) {
+        cout << "Application finished correctly in " << msecs << endl;
+    } else {
+        QFile data(outputFile);
+        if (data.open(QFile::WriteOnly | QFile::Append)) {
+            QTextStream out(&data);
+            out << sourceFile << " " << msecs << endl;
+        } else {
+            cerr << "Could not open output file " << outputFile.toStdString() << endl;
+            return EXIT_FAILURE;
+        }
+    }
+
+    return EXIT_SUCCESS;
+}
+
+static void processOptions(QStringList &args)
+{
+    args.removeFirst(); // The first argument is this own application
+    qDebug() << "Inputs args" << args;
+    const int indexOutputFile = args.indexOf("--outputFile");
+    if (indexOutputFile != -1) {
+        outputFile = args.at(indexOutputFile+1);
+        args.erase(args.begin()+indexOutputFile, args.begin()+(indexOutputFile+2));
+    }
+    qDebug() << "Output args" << args;
+}
+
+static void getSourceFile(const QStringList &chunks)
+{
+    int indexSourceFile = chunks.indexOf("-c");
+    sourceFile  = chunks.at(indexSourceFile + 1);
 }
