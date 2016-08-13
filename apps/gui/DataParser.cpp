@@ -6,6 +6,13 @@
 
 #include <QDebug>
 
+/// \todo remove data duplication once we know what we really want ^_^u
+///
+/// \note Idea: Create another class to contain all the information related with a compilation unit:
+/// - library / application
+/// - time
+/// - ...
+
 struct DataParser::Pimpl
 {
     Pimpl (const QString &path)
@@ -15,7 +22,8 @@ struct DataParser::Pimpl
 
     QFile       file;
 
-    QHash<QString, int> data;
+    QStringList fileNames;
+    QList<int> times;
 };
 
 DataParser::DataParser(const QString &path)
@@ -29,9 +37,14 @@ DataParser::~DataParser()
     delete _impl;
 }
 
-const QHash<QString, int> &DataParser::getData() const
+const QStringList & DataParser::getFileNames() const
 {
-    return _impl->data;
+    return _impl->fileNames;
+}
+
+const QList<int> & DataParser::getTimes() const
+{
+    return _impl->times;
 }
 
 bool DataParser::parseData()
@@ -42,21 +55,29 @@ bool DataParser::parseData()
     }
     QTextStream stream (&_impl->file);
 
-    QString line, sourceFile;
+    QString line, absolutePath, fileName;
     QStringList tokens;
     bool ok = true;
     int msecs;
     quint32 lineNumber = 0;
+
     while (!stream.atEnd()) {
         line = stream.readLine();
         tokens = line.split(" ");
-        sourceFile = tokens.at(0);
+
+        absolutePath = tokens.at(0);
+        const int idxLastSlash = absolutePath.lastIndexOf('/');
+        fileName = absolutePath.mid(idxLastSlash + 1);
+
         msecs = tokens.at(1).toInt(&ok);
+
         if (ok == false) {
             qWarning() << "Error parsing line" << lineNumber;
+        } else {
+            _impl->times << msecs;
+            _impl->fileNames << fileName;
         }
 
-        _impl->data[sourceFile] = msecs;
         lineNumber++;
     }
     return true;

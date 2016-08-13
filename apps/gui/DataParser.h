@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QString>
-#include <QHash>
 
 class DataParser
 {
@@ -13,8 +12,10 @@ public:
     /// Destructor.
     ~DataParser();
 
-    /// Gets the data read from the file
-    const QHash<QString, int> & getData() const;
+    /// Gets a list with the file names (without containing the directory)
+    const QStringList & getFileNames() const;
+
+    const QList<int> & getTimes() const;
 
 private:
     bool parseData();
