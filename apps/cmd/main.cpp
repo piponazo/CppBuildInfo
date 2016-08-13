@@ -16,6 +16,8 @@ static QString sourceFile;
 static void processOptions(QStringList &args);
 static void getSourceFile(const QStringList &chunks);
 
+/// \todo do not show the command output
+
 int main (int argc, char **argv)
 {
     const int maxTimeInMsecs = 30000;
