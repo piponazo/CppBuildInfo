@@ -1,4 +1,2 @@
-add_executable(client client.cpp)
-add_executable(server server.cpp)
-
-target_link_libraries(client Qt5::Core)
+add_subdirectory(cmd)
+add_subdirectory(gui)
