@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 
 #include "DataParser.h"
+#include "chartview.h"
 
 #include <QDir>
 #include <QFileDialog>
@@ -9,7 +10,6 @@
 
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QChart>
-#include <QtCharts/QChartView>
 #include <QtCharts/QBarSet>
 #include <QtCharts/QBarCategoryAxis>
 #include <QtCharts/QHorizontalBarSeries>
@@ -39,6 +39,8 @@ void MainWindow::on_actionOpenFile_triggered()
         QBarSet *set0 = new QBarSet("Time (msecs)");
         QHorizontalBarSeries *series = new QHorizontalBarSeries();
 
+        qDebug() << "Files/times: " << fileNames.size() << times.size();
+
         QStringList sourceFiles;
 
         for (int i = 0; i < fileNames.size(); ++i) {
@@ -53,7 +55,8 @@ void MainWindow::on_actionOpenFile_triggered()
         QChart *chart = new QChart();
         chart->addSeries(series);
         chart->setTitle("Simple horizontal barchart example");
-        chart->setAnimationOptions(QChart::SeriesAnimations);
+        chart->setAnimationOptions(QChart::NoAnimation);
+//        chart->setAnimationOptions(QChart::SeriesAnimations);
 
         chart->setAxisY(axisY, series);
 
@@ -64,7 +67,7 @@ void MainWindow::on_actionOpenFile_triggered()
         chart->legend()->setVisible(true);
         chart->legend()->setAlignment(Qt::AlignBottom);
 
-        QChartView *chartView = new QChartView(chart);
+        ChartView *chartView = new ChartView(chart);
         chartView->setRenderHint(QPainter::Antialiasing);
 
         setCentralWidget(chartView);
