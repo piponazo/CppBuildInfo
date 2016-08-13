@@ -5,7 +5,12 @@ set(EXTRA_EXE_LINKER_FLAGS "")
 set(EXTRA_EXE_LINKER_FLAGS_RELEASE "")
 set(EXTRA_EXE_LINKER_FLAGS_DEBUG "")
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED 14)
 
+# Common compiler flags for clang and gcc
+# TODO : Include support for Clang
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL GNU OR ${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
 
    if(WARNINGS_ANSI_ISO)
       set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -pedantic -Wextra")

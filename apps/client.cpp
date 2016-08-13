@@ -41,7 +41,7 @@ int main (int argc, char **argv)
     const int msecs = startTime.msecsTo(endTime);
 
     if (outputFile.isEmpty()) {
-        cout << "Application finished correctly in " << msecs << endl;
+        cout << "Application finished correctly in " << msecs << " msecs" << endl;
     } else {
         QFile data(outputFile);
         if (data.open(QFile::WriteOnly | QFile::Append)) {
