@@ -5,27 +5,7 @@ set(EXTRA_EXE_LINKER_FLAGS "")
 set(EXTRA_EXE_LINKER_FLAGS_RELEASE "")
 set(EXTRA_EXE_LINKER_FLAGS_DEBUG "")
 
-if (UNIX)
-    if (USE_CLANG)
-        set (CMAKE_C_COMPILER_ID            "Clang")
-        set (CMAKE_CXX_COMPILER_ID          "Clang")
-        set (CMAKE_C_COMPILER               "/usr/bin/clang")
-        set (CMAKE_CXX_COMPILER             "/usr/bin/clang++")
 
-        set (CMAKE_CXX_FLAGS                "")
-        set (CMAKE_CXX_FLAGS_DEBUG          "-g -O0 -DDEBUG")
-        set (CMAKE_CXX_FLAGS_RELEASE        "-O2 -DNDEBUG")
-    else()
-        set (CMAKE_CXX_FLAGS                "")
-        set (CMAKE_CXX_FLAGS_DEBUG          "-g -O0 -DDEBUG")
-#        set (CMAKE_CXX_FLAGS_RELEASE        "-O2")
-    endif()
-elseif(WIN32)
-    message(FATAL_ERROR "Windows Os not supported yet")
-endif()
-
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL GNU OR
-    ${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
 
    if(WARNINGS_ANSI_ISO)
       set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -pedantic -Wextra")
@@ -39,17 +19,11 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL GNU OR
       set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -Weffc++")
    endif()
 
-   set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -std=c++11")
    set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -Wall -Werror=return-type")
 
 endif()
 
 IF (${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
-   execute_process(
-   COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
-   if (NOT (GCC_VERSION VERSION_GREATER 4.7 OR GCC_VERSION VERSION_EQUAL 4.7))
-      message(FATAL_ERROR "${PROJECT_NAME} c++11 support requires g++ 4.7 or greater.")
-   endif ()
 
     set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -fvisibility=hidden") # All the symbols will be hidden by default.
     set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -Wreturn-type")
@@ -62,10 +36,6 @@ IF (${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
         set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -Wno-narrowing")
         set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -Wno-delete-non-virtual-dtor")
         set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -Wno-unnamed-type-template-args")
-    endif()
-
-    if(ENABLE_COVERAGE)
-        set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} --coverage")
     endif()
 
 elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
