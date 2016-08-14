@@ -1,8 +1,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-#include "DataParser.h"
 #include "chartview.h"
+#include <CppBuildInfo/DataParser.h>
 
 #include <QDir>
 #include <QFileDialog>

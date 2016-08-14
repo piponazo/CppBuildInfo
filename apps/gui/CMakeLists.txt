@@ -9,4 +9,4 @@ file(GLOB uis *.ui)
 
 add_executable(gui ${sources} ${headers} ${uis})
 
-target_link_libraries(gui Qt5::Widgets Qt5::Charts)
+target_link_libraries(gui Qt5::Widgets Qt5::Charts CppBuildInfo)
