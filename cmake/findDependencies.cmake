@@ -7,4 +7,8 @@ if (${Qt5Core_VERSION} VERSION_LESS 5.7)
     message(FATAL_ERROR "CppBuildInfo requires at least Qt 5.7. Version found: ${Qt5Core_VERSION}")
 endif ()
 
+if (COMPILE_TESTS)
+    add_subdirectory(${CMAKE_SOURCE_DIR}/cmake/ext/gtest)
+endif()
+
 set(CMAKE_INSTALL_RPATH ${CMAKE_PREFIX_PATH}/lib)

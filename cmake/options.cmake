@@ -13,14 +13,10 @@ endif()
 # ----------------------------------------------------------------------------
 #   PROJECT CONFIGURATION
 # ----------------------------------------------------------------------------
-option(WARNINGS_ARE_ERRORS  "Treat warnings as errors"                                      ON)
-option(WARNINGS_ANSI_ISO    "Issue all the mandatory diagnostics Listed in C standard"      ON)
+option(WARNINGS_ARE_ERRORS  "Treat warnings as errors"                                 ON)
+option(WARNINGS_ANSI_ISO    "Issue all the mandatory diagnostics Listed in C standard" ON)
 
-option(INSTALL_DOC          "Install documentation in system"                               OFF)
-option(USE_MATHJAX          "Generate doc-formulas via mathjax instead of latex"            OFF)
-option(USE_DOT              "Diagram generation with graphviz"                              ON)
-option(USE_LATEX            "Build latex documentation"                                     OFF)
-option(USE_CHM              "Build CHM Windows documentation"                               OFF)
+option(COMPILE_TESTS        "Compile the unit tests for the library"                   OFF)
 
 #set(CMAKE_INCLUDE_DIRS_CONFIGCMAKE ${CMAKE_INSTALL_PREFIX}/include      CACHE PATH "Output directory for headers")
 #set(CMAKE_LIB_DIRS_CONFIGCMAKE     ${CMAKE_INSTALL_PREFIX}/lib          CACHE PATH "Output directory for libraries")
