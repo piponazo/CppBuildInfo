@@ -16,11 +16,10 @@ static QString sourceFile;
 static void processOptions(QStringList &args);
 static void getSourceFile(const QStringList &chunks);
 
-/// \todo do not show the command output
-
 int main (int argc, char **argv)
 {
     const int maxTimeInMsecs = 30000;
+    const QString timeFormat("hh:mm:ss.zzz");
     QCoreApplication app (argc, argv);
     QStringList args = app.arguments();
 
@@ -28,15 +27,13 @@ int main (int argc, char **argv)
     getSourceFile(args);
     QString argsTogeter = args.join(" ");
 
-    qDebug() << "app: " << argsTogeter;
-
     QProcess process;
-    process.setProcessChannelMode(QProcess::ForwardedChannels);
+    process.setProcessChannelMode(QProcess::SeparateChannels);
 
     QTime startTime = QTime::currentTime();
     process.start(argsTogeter);
     if (process.waitForFinished(maxTimeInMsecs) == false) {
-        cerr << "application timeout" << endl;
+        cerr << "application timeout: " << process.errorString().toStdString() << endl;
         return EXIT_FAILURE;
     }
     QTime endTime = QTime::currentTime();
@@ -48,7 +45,9 @@ int main (int argc, char **argv)
         QFile data(outputFile);
         if (data.open(QFile::WriteOnly | QFile::Append)) {
             QTextStream out(&data);
-            out << sourceFile << " " << msecs << endl;
+            out << sourceFile << " " << msecs << " "
+                << startTime.toString(timeFormat) << " "
+                << endTime.toString(timeFormat) << endl;
         } else {
             cerr << "Could not open output file " << outputFile.toStdString() << endl;
             return EXIT_FAILURE;
