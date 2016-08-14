@@ -1,5 +1,5 @@
-file(GLOB_RECURSE sources src/*.cpp src/*.cc)
-file(GLOB_RECURSE headers src/*.h src/*.hpp include/*.h)
+file(GLOB_RECURSE sources src/*.cpp)
+file(GLOB_RECURSE headers src/*.h include/*.h)
 
 add_library(CppBuildInfo ${sources} ${headers})
 

@@ -21,6 +21,9 @@ public:
 
     const QList<int> & getEndingTimes() const;
 
+    /// Gets the number of concurrent compilation processes
+    int getNComcurrentProcesses() const;
+
 private:
     bool parseData();
 

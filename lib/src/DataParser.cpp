@@ -59,6 +59,11 @@ const QList<int> &DataParser::getEndingTimes() const
     return _impl->ending;
 }
 
+int DataParser::getNComcurrentProcesses() const
+{
+    return 0;
+}
+
 bool DataParser::parseData()
 {
     if (!_impl->file.open(QIODevice::ReadOnly | QIODevice::Text)) {
