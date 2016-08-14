@@ -1,3 +1,3 @@
 add_subdirectory(cmd)
-add_subdirectory(gui)
+add_subdirectory(guiCharts)
 add_subdirectory(guiGraphicsView)
