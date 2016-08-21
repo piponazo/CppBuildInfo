@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include "CompilationProcessGraphicItem.h"
 
 #include <CppBuildInfo/DataParser.h>
 #include <CppBuildInfo/CompilationProcess.h>
@@ -25,20 +26,21 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpenFile_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), tr("Text file (*.txt)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(),
+                                                    tr("Text file (*.txt)"));
     if (!fileName.isEmpty()) {
         DataParser parser(fileName);
         const auto & processes = parser.getAllProcesses();
 
-//        ui->graphicsView->scene()
         QGraphicsScene * scene = new QGraphicsScene;
-        int x = 0;
-        int y = 0;
+        qint64 xStart = processes[0].start;
+        qint64 y = 0;
 
-        for (size_t i = 0; i < processes.size(); ++i) {
-            scene->addRect(x, y, processes[i].duration(), 10);
-            x += processes[i].duration();
-            y += 15;
+        for (const auto & p : processes) {
+            auto * item = new CompilationProcessGraphicItem(p.fileName(), p.start - xStart, y,
+                                                            p.duration(), 20);
+            scene->addItem(item);
+            y += 22;
         }
 
         ui->graphicsView->setScene(scene);
