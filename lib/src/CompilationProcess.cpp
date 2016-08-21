@@ -18,9 +18,14 @@
 
 #include <CppBuildInfo/CompilationProcess.h>
 
-CompilationProcess::CompilationProcess(const QString &file, int start, int end) :
-    _file(file)
-  , _start(start)
-  , _end(end)
+CompilationProcess::CompilationProcess(const QString &_file, qint64 _start, qint64 _end) :
+    file(_file)
+  , start(_start)
+  , end(_end)
 {
+}
+
+bool CompilationProcess::operator <(const CompilationProcess &o)
+{
+    return end < o.end;
 }

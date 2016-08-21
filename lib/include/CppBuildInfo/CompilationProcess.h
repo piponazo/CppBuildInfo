@@ -20,13 +20,15 @@
 
 #include <QString>
 
-class CompilationProcess
+/// Information about a compilation process
+struct CompilationProcess
 {
 public:
-    CompilationProcess(const QString &file, int start, int end);
+    CompilationProcess(const QString &file, qint64 start, qint64 end);
 
-private:
-    QString _file;
-    int     _start;
-    int     _end;
+    bool operator < (const CompilationProcess &o);
+
+    QString file;  ///< File being compiled
+    qint64  start; ///< Time in which the compilation started
+    qint64  end;   ///< Time in which the compilation ended
 };
