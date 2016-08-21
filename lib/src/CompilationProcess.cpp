@@ -18,14 +18,30 @@
 
 #include <CppBuildInfo/CompilationProcess.h>
 
-CompilationProcess::CompilationProcess(const QString &_file, qint64 _start, qint64 _end) :
-    file(_file)
+CompilationProcess::CompilationProcess(const QString &_path, qint64 _start, qint64 _end) :
+    absolutePath(_path)
   , start(_start)
   , end(_end)
 {
 }
 
-bool CompilationProcess::operator <(const CompilationProcess &o)
+qint64 CompilationProcess::duration() const
+{
+    return end - start;
+}
+
+QString CompilationProcess::fileName() const
+{
+    const int idxLastSlash = absolutePath.lastIndexOf('/');
+    return absolutePath.mid(idxLastSlash + 1);
+}
+
+bool CompilationProcess::operator <(const CompilationProcess &o) const
 {
     return end < o.end;
+}
+
+bool CompilationProcess::operator >(const CompilationProcess &o) const
+{
+    return end >= o.end;
 }

@@ -2,6 +2,8 @@
 
 #include <QString>
 
+class CompilationProcess;
+
 class DataParser
 {
 public:
@@ -12,17 +14,10 @@ public:
     /// Destructor.
     ~DataParser();
 
-    /// Gets a list with the file names (without containing the directory)
-    const QStringList & getFileNames() const;
-
-    const QList<qint64> & getTimes() const;
-
-    const QList<qint64> & getStartingTimes() const;
-
-    const QList<qint64> & getEndingTimes() const;
+    const std::vector<CompilationProcess> getAllProcesses() const;
 
     /// Gets the number of concurrent compilation processes
-    int getNComcurrentProcesses() const;
+    std::size_t getNConcurrentProcesses() const;
 
 private:
     bool parseData();

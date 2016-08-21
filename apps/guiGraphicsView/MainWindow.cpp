@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 
 #include <CppBuildInfo/DataParser.h>
+#include <CppBuildInfo/CompilationProcess.h>
 
 #include <QDir>
 #include <QFileDialog>
@@ -27,19 +28,16 @@ void MainWindow::on_actionOpenFile_triggered()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), tr("Text file (*.txt)"));
     if (!fileName.isEmpty()) {
         DataParser parser(fileName);
-        auto fileNames = parser.getFileNames();
-        auto times = parser.getTimes();
-        auto starting = parser.getStartingTimes();
-        auto ending = parser.getEndingTimes();
+        const auto & processes = parser.getAllProcesses();
 
 //        ui->graphicsView->scene()
         QGraphicsScene * scene = new QGraphicsScene;
         int x = 0;
         int y = 0;
 
-        for (int i = 0; i < fileNames.size(); ++i) {
-            scene->addRect(x, y, times[i], 10);
-            x += times[i];
+        for (size_t i = 0; i < processes.size(); ++i) {
+            scene->addRect(x, y, processes[i].duration(), 10);
+            x += processes[i].duration();
             y += 15;
         }
 

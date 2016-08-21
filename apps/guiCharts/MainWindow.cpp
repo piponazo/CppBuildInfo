@@ -3,6 +3,7 @@
 
 #include "chartview.h"
 #include <CppBuildInfo/DataParser.h>
+#include <CppBuildInfo/CompilationProcess.h>
 
 #include <QDir>
 #include <QFileDialog>
@@ -33,19 +34,16 @@ void MainWindow::on_actionOpenFile_triggered()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), tr("Text file (*.txt)"));
     if (!fileName.isEmpty()) {
         DataParser parser(fileName);
-        auto fileNames = parser.getFileNames();
-        auto times = parser.getTimes();
+        const auto & processes = parser.getAllProcesses();
 
         QBarSet *set0 = new QBarSet("Time (msecs)");
         QHorizontalBarSeries *series = new QHorizontalBarSeries();
 
-        qDebug() << "Files/times: " << fileNames.size() << times.size();
-
         QStringList sourceFiles;
 
-        for (int i = 0; i < fileNames.size(); ++i) {
-            sourceFiles << fileNames[i];
-            *set0 << times[i];
+        for (size_t i = 0; i < processes.size(); ++i) {
+            sourceFiles << processes[i].fileName();
+            *set0 << processes[i].duration();
         }
 
         series->append(set0);

@@ -24,11 +24,15 @@
 struct CompilationProcess
 {
 public:
-    CompilationProcess(const QString &file, qint64 start, qint64 end);
+    CompilationProcess(const QString &_path, qint64 start, qint64 end);
 
-    bool operator < (const CompilationProcess &o);
+    qint64 duration() const;
+    QString fileName() const;
 
-    QString file;  ///< File being compiled
+    bool operator < (const CompilationProcess &o) const;
+    bool operator > (const CompilationProcess &o) const;
+
+    QString absolutePath;  ///< File being compiled
     qint64  start; ///< Time in which the compilation started
     qint64  end;   ///< Time in which the compilation ended
 };

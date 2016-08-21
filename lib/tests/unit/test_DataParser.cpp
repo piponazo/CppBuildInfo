@@ -1,4 +1,5 @@
 #include <CppBuildInfo/DataParser.h>
+#include <CppBuildInfo/CompilationProcess.h>
 #include <gtest/gtest.h>
 
 #include "tests_config.h"
@@ -21,24 +22,17 @@ TEST(LibCppBuildInfoDataParser, shouldCreateInstanceWithEmptyFileAndReadNothing)
     ASSERT_TRUE(QFileInfo::exists(path));
 
     DataParser instance (path);
-    EXPECT_TRUE(instance.getFileNames().empty());
-    EXPECT_TRUE(instance.getTimes().empty());
-    EXPECT_TRUE(instance.getStartingTimes().empty());
-    EXPECT_TRUE(instance.getEndingTimes().empty());
-    EXPECT_EQ(0, instance.getNComcurrentProcesses());
+    EXPECT_TRUE(instance.getAllProcesses().empty());
+    EXPECT_EQ(static_cast<std::size_t>(0), instance.getNConcurrentProcesses());
 }
 
 TEST(LibCppBuildInfoDataParser, shouldCreateInstanceWithValidDataAndReadValues)
 {
-    const QString path = QString(TEST_DATA_PATH) + "/fakeFile1.txt";
+    const QString path = QString(TEST_DATA_PATH) + "/fakeFile8ConcurrentCompilations.txt";
     DataParser instance (path);
 
-    EXPECT_FALSE(instance.getFileNames().empty());
-    EXPECT_FALSE(instance.getTimes().empty());
-    EXPECT_FALSE(instance.getStartingTimes().empty());
-    EXPECT_FALSE(instance.getEndingTimes().empty());
-//    EXPECT_GT(0, instance.getNComcurrentProcesses());
-    EXPECT_EQ(4, instance.getNComcurrentProcesses());
+    EXPECT_FALSE(instance.getAllProcesses().empty());
+    EXPECT_EQ(static_cast<std::size_t>(8), instance.getNConcurrentProcesses());
 }
 
 /// \todo make parseData public and returning false if the data in the file is not valid
