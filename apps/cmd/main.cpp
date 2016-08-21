@@ -1,7 +1,7 @@
 #include <QCoreApplication>
 #include <QProcess>
 #include <QStringList>
-#include <QTime>
+#include <QDateTime>
 #include <QTextStream>
 #include <QFile>
 #include <QDebug>
@@ -19,7 +19,6 @@ static void getSourceFile(const QStringList &chunks);
 int main (int argc, char **argv)
 {
     const int maxTimeInMsecs = 30000;
-    const QString timeFormat("hh:mm:ss.zzz");
     QCoreApplication app (argc, argv);
     QStringList args = app.arguments();
 
@@ -30,14 +29,14 @@ int main (int argc, char **argv)
     QProcess process;
     process.setProcessChannelMode(QProcess::SeparateChannels);
 
-    QTime startTime = QTime::currentTime();
+    qint64 startTime = QDateTime::currentMSecsSinceEpoch();
     process.start(argsTogeter);
     if (process.waitForFinished(maxTimeInMsecs) == false) {
         cerr << "application timeout: " << process.errorString().toStdString() << endl;
         return EXIT_FAILURE;
     }
-    QTime endTime = QTime::currentTime();
-    const int msecs = startTime.msecsTo(endTime);
+    qint64 endTime = QDateTime::currentMSecsSinceEpoch();
+    const qint64 msecs = endTime - startTime;
 
     if (outputFile.isEmpty()) {
         cout << "Application finished correctly in " << msecs << " msecs" << endl;
@@ -45,9 +44,7 @@ int main (int argc, char **argv)
         QFile data(outputFile);
         if (data.open(QFile::WriteOnly | QFile::Append)) {
             QTextStream out(&data);
-            out << sourceFile << " " << msecs << " "
-                << startTime.toString(timeFormat) << " "
-                << endTime.toString(timeFormat) << endl;
+            out << sourceFile << " " << msecs << " " << startTime << " " << endTime << endl;
         } else {
             cerr << "Could not open output file " << outputFile.toStdString() << endl;
             return EXIT_FAILURE;
