@@ -9,3 +9,8 @@ target_link_libraries(tests
 	${GTEST_LIBS_DIR}/libgtest_main.a
 	CppBuildInfo
 )
+
+# Configuration file
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/tests_config.h")
+target_include_directories(tests PRIVATE ${CMAKE_CURRENT_BINARY_DIR}) # For detecting tests_config.h
+
