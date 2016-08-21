@@ -19,6 +19,9 @@ public:
     /// Gets the number of concurrent compilation processes
     std::size_t getNConcurrentProcesses() const;
 
+    /// Gets the total time of the compilation [in msecs]
+    std::size_t getTotalTime() const;
+
 private:
     bool parseData();
 

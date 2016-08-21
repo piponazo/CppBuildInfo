@@ -64,6 +64,14 @@ std::size_t DataParser::getNConcurrentProcesses() const
     return _impl->maxProcs;
 }
 
+std::size_t DataParser::getTotalTime() const
+{
+    if (_impl->allProcs.empty()) {
+        return 0;
+    }
+    return static_cast<std::size_t>(_impl->allProcs.back().end - _impl->allProcs.front().start);
+}
+
 // -------------------------------------------------------------------------------------------------
 // Private class methods
 // -------------------------------------------------------------------------------------------------

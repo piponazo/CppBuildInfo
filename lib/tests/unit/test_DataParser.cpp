@@ -24,6 +24,7 @@ TEST(LibCppBuildInfoDataParser, shouldCreateInstanceWithEmptyFileAndReadNothing)
     DataParser instance (path);
     EXPECT_TRUE(instance.getAllProcesses().empty());
     EXPECT_EQ(static_cast<std::size_t>(0), instance.getNConcurrentProcesses());
+    EXPECT_EQ(static_cast<std::size_t>(0), instance.getTotalTime());
 }
 
 TEST(LibCppBuildInfoDataParser, shouldCreateInstanceWithValidDataAndReadValues)
@@ -33,6 +34,5 @@ TEST(LibCppBuildInfoDataParser, shouldCreateInstanceWithValidDataAndReadValues)
 
     EXPECT_FALSE(instance.getAllProcesses().empty());
     EXPECT_EQ(static_cast<std::size_t>(8), instance.getNConcurrentProcesses());
+    EXPECT_EQ(static_cast<std::size_t>(7988), instance.getTotalTime());
 }
-
-/// \todo make parseData public and returning false if the data in the file is not valid
