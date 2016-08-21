@@ -35,4 +35,4 @@ CMakeLists.txt.user
 build*
 
 # Vim temporal files
-.*
+.*.swp
