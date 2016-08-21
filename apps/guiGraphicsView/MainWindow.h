@@ -20,6 +20,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    struct Pimpl;
+    Pimpl * _ui;
 };
 
 #endif // MAINWINDOW_H

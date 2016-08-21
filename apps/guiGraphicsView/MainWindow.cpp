@@ -9,19 +9,56 @@
 #include <QFileDialog>
 #include <QDebug>
 
+#include <QSplitter>
+#include <QGraphicsView>
+
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QFrame>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+struct MainWindow::Pimpl
+{
+    void setupUi(QMainWindow *parent);
+
+    QSplitter * splitter {nullptr};
+    QGraphicsView * view {nullptr};
+    QFrame * frame {nullptr};
+    QLabel * labelTotalTime;
+};
+
+void MainWindow::Pimpl::setupUi(QMainWindow *parent)
+{
+    splitter = new QSplitter(parent);
+    view = new QGraphicsView;
+    view->setMinimumWidth(500);
+
+    QVBoxLayout *frameLayout = new QVBoxLayout;
+    labelTotalTime = new QLabel("Total time: ");
+    frameLayout->addWidget(labelTotalTime);
+    frame = new QFrame;
+    frame->setLayout(frameLayout);
+
+    splitter->addWidget(view);
+    splitter->addWidget(frame);
+
+    parent->centralWidget()->layout()->addWidget(splitter);
+}
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+    , _ui(new Pimpl)
 {
     ui->setupUi(this);
+    _ui->setupUi(this);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete _ui;
 }
 
 void MainWindow::on_actionOpenFile_triggered()
@@ -43,6 +80,8 @@ void MainWindow::on_actionOpenFile_triggered()
             y += 22;
         }
 
-        ui->graphicsView->setScene(scene);
+        _ui->view->setScene(scene);
+        _ui->labelTotalTime->setText(QString("Total time: %1 msecs").arg(parser.getTotalTime()));
     }
+
 }
