@@ -1,4 +1,6 @@
 # CppBuildInfo
+[![Build Status](https://travis-ci.org/piponazo/CppBuildInfo.svg?branch=master)](https://travis-ci.org/piponazo/CppBuildInfo)
+
 Application for measuring / analyzing build times in C++ projects.
 
 This project includes two applications:
