@@ -36,15 +36,14 @@ int main (int argc, char **argv)
         return EXIT_FAILURE;
     }
     qint64 endTime = QDateTime::currentMSecsSinceEpoch();
-    const qint64 msecs = endTime - startTime;
 
     if (outputFile.isEmpty()) {
-        cout << "Application finished correctly in " << msecs << " msecs" << endl;
+        cout << "Application finished correctly in " << endTime - startTime << " msecs" << endl;
     } else {
         QFile data(outputFile);
         if (data.open(QFile::WriteOnly | QFile::Append)) {
             QTextStream out(&data);
-            out << sourceFile << " " << msecs << " " << startTime << " " << endTime << endl;
+            out << sourceFile << " " << startTime << " " << endTime << endl;
         } else {
             cerr << "Could not open output file " << outputFile.toStdString() << endl;
             return EXIT_FAILURE;

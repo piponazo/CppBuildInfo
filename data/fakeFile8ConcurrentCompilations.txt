@@ -1,21 +1,21 @@
-/home/luis/job/22/pix4d-mapper/src/foundation/src/foundation_main.cpp 43 1471676395319 1471676395362
-/home/luis/job/22/pix4d-mapper/src/foundation/src/std/ostream.cpp 1520 1471676395320 1471676396840
-/home/luis/job/22/pix4d-mapper/src/foundation/src/system/env.cpp 1677 1471676395367 1471676397044
-/home/luis/job/22/pix4d-mapper/src/foundation/src/time/TimeDebugger.cpp 2073 1471676395320 1471676397393
-/home/luis/job/22/pix4d-mapper/src/foundation/src/time/time.cpp 2469 1471676395328 1471676397797
-/home/luis/job/22/pix4d-mapper/src/foundation/src/text/text.cpp 2849 1471676395322 1471676398171
-/home/luis/job/22/pix4d-mapper/src/foundation/src/time/IterationTimer.cpp 3022 1471676395331 1471676398353
-/home/luis/job/22/pix4d-mapper/src/foundation/src/system/diskInfo.cpp 1363 1471676397086 1471676398449
-/home/luis/job/22/pix4d-mapper/src/foundation/src/log/LogLine.cpp 1278 1471676397822 1471676399100
-/home/luis/job/22/pix4d-mapper/src/foundation/src/math/math_trigonometry.cpp 3108 1471676396845 1471676399953
-/home/luis/job/22/pix4d-mapper/src/foundation/src/log/LogSource.cpp 1826 1471676398176 1471676400002
-/home/luis/job/22/pix4d-mapper/src/foundation/src/log/LogSink.cpp 1852 1471676398478 1471676400330
-/home/luis/job/22/pix4d-mapper/src/foundation/src/log/OstreamLogSink.cpp 2204 1471676399130 1471676401334
-/home/luis/job/22/pix4d-mapper/src/foundation/src/log/LogLineFormatter.cpp 3221 1471676398357 1471676401578
-/home/luis/job/22/pix4d-mapper/src/foundation/src/log/loggerTypes.cpp 1364 1471676400357 1471676401721
-/home/luis/job/22/pix4d-mapper/src/foundation/src/log/logger.cpp 1746 1471676399982 1471676401728
-/home/luis/job/22/pix4d-mapper/src/foundation/src/log/LogStreamer.cpp 2004 1471676400029 1471676402033
-/home/luis/job/22/pix4d-mapper/src/foundation/src/system/system.cpp 5295 1471676397417 1471676402712
-/home/luis/job/22/pix4d-mapper/src/foundation/src/file/EphemeralDir.cpp 1044 1471676401733 1471676402777
-/home/luis/job/22/pix4d-mapper/src/foundation/src/file/mkdtempImpl.cpp 1235 1471676401607 1471676402842
-/home/luis/job/22/pix4d-mapper/src/foundation/src/file/file.cpp 1942 1471676401365 1471676403307
+/home/luis/job/22/pix4d-mapper/src/foundation/src/foundation_main.cpp 1471676395319 1471676395362
+/home/luis/job/22/pix4d-mapper/src/foundation/src/std/ostream.cpp 1471676395320 1471676396840
+/home/luis/job/22/pix4d-mapper/src/foundation/src/system/env.cpp 1471676395367 1471676397044
+/home/luis/job/22/pix4d-mapper/src/foundation/src/time/TimeDebugger.cpp 1471676395320 1471676397393
+/home/luis/job/22/pix4d-mapper/src/foundation/src/time/time.cpp 1471676395328 1471676397797
+/home/luis/job/22/pix4d-mapper/src/foundation/src/text/text.cpp 1471676395322 1471676398171
+/home/luis/job/22/pix4d-mapper/src/foundation/src/time/IterationTimer.cpp 1471676395331 1471676398353
+/home/luis/job/22/pix4d-mapper/src/foundation/src/system/diskInfo.cpp 1471676397086 1471676398449
+/home/luis/job/22/pix4d-mapper/src/foundation/src/log/LogLine.cpp 1471676397822 1471676399100
+/home/luis/job/22/pix4d-mapper/src/foundation/src/math/math_trigonometry.cpp 1471676396845 1471676399953
+/home/luis/job/22/pix4d-mapper/src/foundation/src/log/LogSource.cpp 1471676398176 1471676400002
+/home/luis/job/22/pix4d-mapper/src/foundation/src/log/LogSink.cpp 1471676398478 1471676400330
+/home/luis/job/22/pix4d-mapper/src/foundation/src/log/OstreamLogSink.cpp 1471676399130 1471676401334
+/home/luis/job/22/pix4d-mapper/src/foundation/src/log/LogLineFormatter.cpp 1471676398357 1471676401578
+/home/luis/job/22/pix4d-mapper/src/foundation/src/log/loggerTypes.cpp 1471676400357 1471676401721
+/home/luis/job/22/pix4d-mapper/src/foundation/src/log/logger.cpp 1471676399982 1471676401728
+/home/luis/job/22/pix4d-mapper/src/foundation/src/log/LogStreamer.cpp 1471676400029 1471676402033
+/home/luis/job/22/pix4d-mapper/src/foundation/src/system/system.cpp 1471676397417 1471676402712
+/home/luis/job/22/pix4d-mapper/src/foundation/src/file/EphemeralDir.cpp 1471676401733 1471676402777
+/home/luis/job/22/pix4d-mapper/src/foundation/src/file/mkdtempImpl.cpp 1471676401607 1471676402842
+/home/luis/job/22/pix4d-mapper/src/foundation/src/file/file.cpp 1471676401365 1471676403307

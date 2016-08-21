@@ -74,11 +74,11 @@ bool DataParser::parseData()
         qWarning() << "Error opening file";
         return false;
     }
-    QTextStream stream (&_impl->file);
 
-    QString line, absolutePath, fileName;
+    QTextStream stream (&_impl->file);
+    QString line, absolutePath;
     QStringList tokens;
-    bool ok1 = true, ok2 = true, ok3 = true;
+    bool okStart = true, okEnd = true;
     qint64 start, end;
     quint32 lineNumber = 0;
 
@@ -88,11 +88,10 @@ bool DataParser::parseData()
         tokens = line.split(" ");
 
         absolutePath = tokens.at(0);
-        /// \todo delete msecs from command line app
-        start = tokens.at(2).toLong(&ok2);
-        end = tokens.at(3).toLong(&ok3);
+        start = tokens.at(1).toLong(&okStart);
+        end = tokens.at(2).toLong(&okEnd);
 
-        if (!ok1 || !ok2 || !ok3) {
+        if (!okStart || !okEnd) {
             qWarning() << "Error parsing line" << lineNumber;
             return false;
         } else {
@@ -101,6 +100,7 @@ bool DataParser::parseData()
 
         lineNumber++;
     }
+
     _impl->concurrentProcs.clear();
 
     return true;
