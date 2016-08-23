@@ -65,6 +65,7 @@ void MainWindow::on_actionOpenFile_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(),
                                                     tr("Text file (*.txt)"));
+    QRectF rect;
     if (!fileName.isEmpty()) {
         DataParser parser(fileName);
         const auto & processes = parser.getAllProcesses();
@@ -80,8 +81,15 @@ void MainWindow::on_actionOpenFile_triggered()
             y += 22;
         }
 
+        rect.setX(processes.front().start);
+        rect.setY(0);
+        rect.setWidth(parser.getTotalTime());
+        rect.setHeight(y);
+
         _ui->view->setScene(scene);
         _ui->labelTotalTime->setText(QString("Total time: %1 msecs").arg(parser.getTotalTime()));
     }
+
+    _ui->view->fitInView(rect);
 
 }
