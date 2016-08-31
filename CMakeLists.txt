@@ -1,5 +1,5 @@
 project(CppBuildInfo)
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.5)
 
 include(cmake/versions.cmake              REQUIRED)
 include(cmake/options.cmake               REQUIRED)
