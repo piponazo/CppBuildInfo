@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QDebug>
 
+#include <QMessageBox>
 #include <QSplitter>
 #include <QGraphicsView>
 
@@ -66,30 +67,37 @@ void MainWindow::on_actionOpenFile_triggered()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(),
                                                     tr("Text file (*.txt)"));
     QRectF rect;
-    if (!fileName.isEmpty()) {
-        DataParser parser(fileName);
-        const auto & processes = parser.getAllProcesses();
 
-        QGraphicsScene * scene = new QGraphicsScene;
-        qint64 xStart = processes[0].start;
-        qint64 y = 0;
+	if (fileName.isEmpty()) {
+		return;
+	}
 
-        for (const auto & p : processes) {
-            auto * item = new CompilationProcessGraphicItem(p.fileName(), p.start - xStart, y,
-                                                            p.duration(), 20);
-            scene->addItem(item);
-            y += 22;
-        }
+	DataParser parser(fileName);
+	const auto & processes = parser.getAllProcesses();
+	if (processes.empty()) {
+		QMessageBox::warning(this, tr("Error parsing the file"),
+			tr("Either the data file is empty or the data is incorrect"));
+		return;
+	}
 
-        rect.setX(processes.front().start);
-        rect.setY(0);
-        rect.setWidth(parser.getTotalTime());
-        rect.setHeight(y);
+	QGraphicsScene * scene = new QGraphicsScene;
+	qint64 xStart = processes[0].start;
+	qint64 y = 0;
 
-        _ui->view->setScene(scene);
-        _ui->labelTotalTime->setText(QString("Total time: %1 msecs").arg(parser.getTotalTime()));
-    }
+	for (const auto & p : processes) {
+		auto * item = new CompilationProcessGraphicItem(p.fileName(), p.start - xStart, y,
+														p.duration(), 20);
+		scene->addItem(item);
+		y += 22;
+	}
+
+	rect.setX(processes.front().start);
+	rect.setY(0);
+	rect.setWidth(parser.getTotalTime());
+	rect.setHeight(y);
+
+	_ui->view->setScene(scene);
+	_ui->labelTotalTime->setText(QString("Total time: %1 msecs").arg(parser.getTotalTime()));
 
     _ui->view->fitInView(rect);
-
 }
