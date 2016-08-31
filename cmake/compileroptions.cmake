@@ -47,7 +47,7 @@ elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
     message(FATAL_ERROR "Clang not supported yet")
 
 elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-    message(FATAL_ERROR "MSVC not supported yet")
+    #    message(FATAL_ERROR "MSVC not supported yet")
 
 endif()
 

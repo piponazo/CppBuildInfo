@@ -1,8 +1,9 @@
 #pragma once
 
 #include <QString>
+#include <vector>
 
-class CompilationProcess;
+struct CompilationProcess;
 
 class DataParser
 {
