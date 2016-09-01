@@ -3,8 +3,8 @@ file(GLOB_RECURSE sources unit/*.cpp)
 add_executable(tests main.cpp ${sources})
 add_dependencies(tests googletest)
 
-message("GTEST_INCLUDE_DIRS : ${GTEST_INCLUDE_DIRS}")
-message("GTEST LIBSSSSS: ${GTEST_LIBS}")
+#message("GTEST_INCLUDE_DIRS : ${GTEST_INCLUDE_DIRS}")
+#message("GTEST LIBSSSSS: ${GTEST_LIBS}")
 
 target_include_directories(tests PRIVATE ${GTEST_INCLUDE_DIRS})
 target_link_libraries(tests PRIVATE CppBuildInfo ${GTEST_LIBS})

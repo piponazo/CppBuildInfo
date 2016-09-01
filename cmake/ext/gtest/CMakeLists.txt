@@ -8,6 +8,8 @@ ExternalProject_Add(googletest
                -Dgtest_build_tests=OFF
                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/install
+               -DBUILD_GTEST=ON
+               -DBUILD_GMOCK=OFF
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
