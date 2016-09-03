@@ -22,16 +22,31 @@
 
 struct MainWindow::Pimpl
 {
-    void setupUi(QMainWindow *parent);
+    void setupUi(QMainWindow *parent, Ui::MainWindow *ui_);
 
+    void createActionsAndConnections();
+    void createMenus();
+    void updateRecentActionList();
+    void loadFile(const QString &path);
+    void saveIntoRecentList(const QString &path);
+
+    // Stuff for recent projects feature
+    QList<QAction*> _recentFileActionList;
+    QString _currentFilePath;
+    const int _maxFileNr {5};
+
+    QMainWindow * parent {nullptr};
+    Ui::MainWindow *ui {nullptr};
     QSplitter * splitter {nullptr};
     QGraphicsView * view {nullptr};
     QFrame * frame {nullptr};
-    QLabel * labelTotalTime;
+    QLabel * labelTotalTime {nullptr};
 };
 
-void MainWindow::Pimpl::setupUi(QMainWindow *parent)
+void MainWindow::Pimpl::setupUi(QMainWindow *parent_, Ui::MainWindow *ui_)
 {
+    parent = parent_;
+    ui = ui_;
     splitter = new QSplitter(parent);
     view = new QGraphicsView;
     view->setMinimumWidth(500);
@@ -51,34 +66,33 @@ void MainWindow::Pimpl::setupUi(QMainWindow *parent)
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , _ui(new Pimpl)
-    , _maxFileNr(5)
+    , _impl(new Pimpl)
 {
     ui->setupUi(this);
-    _ui->setupUi(this);
+    _impl->setupUi(this, ui);
 
-    createActionsAndConnections();
-    createMenus();
+    _impl->createActionsAndConnections();
+    _impl->createMenus();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete _ui;
+    delete _impl;
 }
 
-void MainWindow::createActionsAndConnections()
+void MainWindow::Pimpl::createActionsAndConnections()
 {
     QAction* recentFileAction = 0;
     for(int i = 0; i < _maxFileNr; ++i){
-        recentFileAction = new QAction(this);
+        recentFileAction = new QAction(parent);
         recentFileAction->setVisible(false);
-        QObject::connect(recentFileAction, SIGNAL(triggered()), this, SLOT(openRecent()));
+        QObject::connect(recentFileAction, SIGNAL(triggered()), parent, SLOT(openRecent()));
         _recentFileActionList.append(recentFileAction);
     }
 }
 
-void MainWindow::createMenus()
+void MainWindow::Pimpl::createMenus()
 {
     for(int i = 0; i < _maxFileNr; ++i) {
         ui->menuRecentFiles->addAction(_recentFileActionList.at(i));
@@ -87,7 +101,7 @@ void MainWindow::createMenus()
     updateRecentActionList();
 }
 
-void MainWindow::updateRecentActionList()
+void MainWindow::Pimpl::updateRecentActionList()
 {
     QSettings settings;
     QStringList recentFilePaths = settings.value("recentFiles").toStringList();
@@ -110,12 +124,12 @@ void MainWindow::updateRecentActionList()
     }
 }
 
-void MainWindow::loadFile(const QString &path)
+void MainWindow::Pimpl::loadFile(const QString &path)
 {
     DataParser parser(path);
     const auto & processes = parser.getAllProcesses();
     if (processes.empty()) {
-        QMessageBox::warning(this, tr("Error parsing the file"),
+        QMessageBox::warning(parent, tr("Error parsing the file"),
             tr("Either the data file is empty or the data is incorrect"));
         return;
     }
@@ -137,17 +151,17 @@ void MainWindow::loadFile(const QString &path)
     rect.setWidth(parser.getTotalTime());
     rect.setHeight(y);
 
-    _ui->view->setScene(scene);
-    _ui->labelTotalTime->setText(QString("Total time: %1 msecs").arg(parser.getTotalTime()));
+    view->setScene(scene);
+    labelTotalTime->setText(QString("Total time: %1 msecs").arg(parser.getTotalTime()));
 
-    _ui->view->fitInView(rect);
+    view->fitInView(rect);
     saveIntoRecentList(path);
 }
 
-void MainWindow::saveIntoRecentList(const QString &path)
+void MainWindow::Pimpl::saveIntoRecentList(const QString &path)
 {
     _currentFilePath = path;
-    setWindowFilePath(_currentFilePath);
+    parent->setWindowFilePath(_currentFilePath);
 
     QSettings settings;
     QStringList recentFilePaths = settings.value("recentFiles").toStringList();
@@ -168,7 +182,7 @@ void MainWindow::on_actionOpenFile_triggered()
                                                     tr("Text file (*.txt)"));
 
     if (!fileName.isEmpty()) {
-        loadFile(fileName);
+        _impl->loadFile(fileName);
     }
 }
 
@@ -176,7 +190,7 @@ void MainWindow::openRecent()
 {
     QAction *action = qobject_cast<QAction *>(sender());
     if (action) {
-        loadFile(action->data().toString());
+        _impl->loadFile(action->data().toString());
     }
 }
 
