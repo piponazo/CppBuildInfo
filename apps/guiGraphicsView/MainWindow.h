@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 
@@ -17,11 +16,21 @@ public:
 
 private slots:
     void on_actionOpenFile_triggered();
+    void openRecent();
 
 private:
+    void createActionsAndConnections();
+    void createMenus();
+    void updateRecentActionList();
+    void loadFile(const QString &path);
+    void saveIntoRecentList(const QString &path);
+
     Ui::MainWindow *ui;
+
     struct Pimpl;
     Pimpl * _ui;
-};
 
-#endif // MAINWINDOW_H
+    QList<QAction*> _recentFileActionList;
+    const int _maxFileNr;
+    QString _currentFilePath;
+};
