@@ -5,9 +5,13 @@ add_dependencies(tests googletest)
 
 #message("GTEST_INCLUDE_DIRS : ${GTEST_INCLUDE_DIRS}")
 #message("GTEST LIBSSSSS: ${GTEST_LIBS}")
+#message("GTEST DIR: ${GTEST_LIBS_DIR}")
 
+#link_directories(${GTEST_LIBS_DIR})
 target_include_directories(tests PRIVATE ${GTEST_INCLUDE_DIRS})
+#target_link_libraries(tests PRIVATE CppBuildInfo gtest)
 target_link_libraries(tests PRIVATE CppBuildInfo ${GTEST_LIBS})
+
 
 # Configuration file
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/tests_config.h")

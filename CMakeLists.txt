@@ -1,6 +1,8 @@
 project(CppBuildInfo)
 cmake_minimum_required(VERSION 3.5)
 
+include(ExternalProject)
+
 include(cmake/versions.cmake              REQUIRED)
 include(cmake/options.cmake               REQUIRED)
 include(cmake/findDependencies.cmake      REQUIRED)
