@@ -96,8 +96,8 @@ bool DataParser::parseData()
         tokens = line.split(" ");
 
         absolutePath = tokens.at(0);
-        start = tokens.at(1).toLong(&okStart);
-        end = tokens.at(2).toLong(&okEnd);
+        start = tokens.at(1).toLongLong(&okStart);
+        end = tokens.at(2).toLongLong(&okEnd);
 
         if (!okStart || !okEnd) {
             qWarning() << "Error parsing line" << lineNumber;
