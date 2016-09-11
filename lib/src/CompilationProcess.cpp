@@ -18,8 +18,14 @@
 
 #include <CppBuildInfo/CompilationProcess.h>
 
-CompilationProcess::CompilationProcess(const QString &_path, qint64 _start, qint64 _end) :
-    absolutePath(_path)
+CompilationProcess::CompilationProcess()
+  : start(0)
+  , end(0)
+{
+}
+
+CompilationProcess::CompilationProcess(const QString &_path, qint64 _start, qint64 _end)
+  : absolutePath(_path)
   , start(_start)
   , end(_end)
 {

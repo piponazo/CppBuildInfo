@@ -20,6 +20,22 @@
 #include <QLabel>
 #include <QFrame>
 
+namespace
+{
+    void getNextCoordinates(std::vector<CompilationProcess> &concurrentProcs,
+                            const CompilationProcess & nextProc,
+                            qint64 &nextY)
+    {
+        for (size_t i = 0; i<concurrentProcs.size(); i++) {
+            if (concurrentProcs[i].end < nextProc.start) {
+                concurrentProcs[i] = nextProc;
+                nextY = static_cast<qint64>(i) * 22;
+                break;
+            }
+        }
+    }
+}
+
 struct MainWindow::Pimpl
 {
     void setupUi(QMainWindow *parent, Ui::MainWindow *ui_);
@@ -128,6 +144,7 @@ void MainWindow::Pimpl::loadFile(const QString &path)
 {
     DataParser parser(path);
     const auto & processes = parser.getAllProcesses();
+    const size_t nConcurrentProcs = parser.getNConcurrentProcesses();
     if (processes.empty()) {
         QMessageBox::warning(parent, tr("Error parsing the file"),
             tr("Either the data file is empty or the data is incorrect"));
@@ -137,12 +154,13 @@ void MainWindow::Pimpl::loadFile(const QString &path)
     QGraphicsScene * scene = new QGraphicsScene;
     qint64 xStart = processes[0].start;
     qint64 y = 0;
+    std::vector<CompilationProcess> concurrentProcs (nConcurrentProcs);
 
     for (const auto & p : processes) {
+        getNextCoordinates(concurrentProcs, p, y);
         auto * item = new CompilationProcessGraphicItem(p.fileName(), p.start - xStart, y,
                                                         p.duration(), 20);
         scene->addItem(item);
-        y += 22;
     }
 
     QRectF rect;

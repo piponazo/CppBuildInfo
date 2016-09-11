@@ -24,6 +24,7 @@
 struct CompilationProcess
 {
 public:
+    CompilationProcess();
     CompilationProcess(const QString &_path, qint64 start, qint64 end);
 
     qint64 duration() const;
