@@ -47,9 +47,9 @@ struct MainWindow::Pimpl
     void saveIntoRecentList(const QString &path);
 
     // Stuff for recent projects feature
-    QList<QAction*> _recentFileActionList;
-    QString _currentFilePath;
-    const int _maxFileNr {5};
+    QList<QAction*> recentFileActionList;
+    QString currentFilePath;
+    const int maxFileNr {5};
 
     QMainWindow * parent {nullptr};
     Ui::MainWindow *ui {nullptr};
@@ -100,18 +100,18 @@ MainWindow::~MainWindow()
 void MainWindow::Pimpl::createActionsAndConnections()
 {
     QAction* recentFileAction = 0;
-    for(int i = 0; i < _maxFileNr; ++i){
+    for(int i = 0; i < maxFileNr; ++i){
         recentFileAction = new QAction(parent);
         recentFileAction->setVisible(false);
         QObject::connect(recentFileAction, SIGNAL(triggered()), parent, SLOT(openRecent()));
-        _recentFileActionList.append(recentFileAction);
+        recentFileActionList.append(recentFileAction);
     }
 }
 
 void MainWindow::Pimpl::createMenus()
 {
-    for(int i = 0; i < _maxFileNr; ++i) {
-        ui->menuRecentFiles->addAction(_recentFileActionList.at(i));
+    for(int i = 0; i < maxFileNr; ++i) {
+        ui->menuRecentFiles->addAction(recentFileActionList.at(i));
     }
 
     updateRecentActionList();
@@ -123,20 +123,20 @@ void MainWindow::Pimpl::updateRecentActionList()
     QStringList recentFilePaths = settings.value("recentFiles").toStringList();
 
     int itEnd = 0;
-    if(recentFilePaths.size() <= _maxFileNr)
+    if(recentFilePaths.size() <= maxFileNr)
         itEnd = recentFilePaths.size();
     else
-        itEnd = _maxFileNr;
+        itEnd = maxFileNr;
 
     for (int i = 0; i < itEnd; ++i) {
         QString strippedName = QFileInfo(recentFilePaths.at(i)).fileName();
-        _recentFileActionList.at(i)->setText(strippedName);
-        _recentFileActionList.at(i)->setData(recentFilePaths.at(i));
-        _recentFileActionList.at(i)->setVisible(true);
+        recentFileActionList.at(i)->setText(strippedName);
+        recentFileActionList.at(i)->setData(recentFilePaths.at(i));
+        recentFileActionList.at(i)->setVisible(true);
     }
 
-    for (int i = itEnd; i < _maxFileNr; ++i) {
-        _recentFileActionList.at(i)->setVisible(false);
+    for (int i = itEnd; i < maxFileNr; ++i) {
+        recentFileActionList.at(i)->setVisible(false);
     }
 }
 
@@ -166,7 +166,8 @@ void MainWindow::Pimpl::loadFile(const QString &path)
     QRectF rect;
     rect.setX(processes.front().start);
     rect.setY(0);
-    rect.setWidth(parser.getTotalTime());
+//    rect.setWidth(parser.getTotalTime());
+    rect.setWidth(1000);
     rect.setHeight(y);
 
     view->setScene(scene);
@@ -178,14 +179,14 @@ void MainWindow::Pimpl::loadFile(const QString &path)
 
 void MainWindow::Pimpl::saveIntoRecentList(const QString &path)
 {
-    _currentFilePath = path;
-    parent->setWindowFilePath(_currentFilePath);
+    currentFilePath = path;
+    parent->setWindowFilePath(currentFilePath);
 
     QSettings settings;
     QStringList recentFilePaths = settings.value("recentFiles").toStringList();
     recentFilePaths.removeAll(path);
     recentFilePaths.prepend(path);
-    while (recentFilePaths.size() > _maxFileNr) {
+    while (recentFilePaths.size() > maxFileNr) {
         recentFilePaths.removeLast();
     }
     settings.setValue("recentFiles", recentFilePaths);
