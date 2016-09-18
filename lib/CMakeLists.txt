@@ -1,6 +1,7 @@
 file(GLOB_RECURSE sources src/*.cpp)
 file(GLOB_RECURSE headers src/*.h include/*.h)
 
+source_group("Headers" FILES ${headers})
 add_library(CppBuildInfo ${sources} ${headers})
 
 #set_target_properties(CppBuildInfo PROPERTIES CXX_VISIBILITY_PRESET hidden)
