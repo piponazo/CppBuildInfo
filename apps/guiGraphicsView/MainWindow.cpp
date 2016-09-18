@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "CompilationProcessGraphicItem.h"
+#include "mygraphicsview.h"
 
 #include <CppBuildInfo/DataParser.h>
 #include <CppBuildInfo/CompilationProcess.h>
@@ -12,7 +13,6 @@
 
 #include <QMessageBox>
 #include <QSplitter>
-#include <QGraphicsView>
 
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
@@ -39,7 +39,7 @@ namespace
 
 struct MainWindow::Pimpl
 {
-    void setupUi(QMainWindow *parent, Ui::MainWindow *ui_);
+    void setupUi(MainWindow *parent, Ui::MainWindow *ui_);
 
     void createActionsAndConnections();
     void createMenus();
@@ -52,20 +52,20 @@ struct MainWindow::Pimpl
     QString currentFilePath;
     const int maxFileNr {5};
 
-    QMainWindow * parent {nullptr};
+    MainWindow * parent {nullptr};
     Ui::MainWindow *ui {nullptr};
     QSplitter * splitter {nullptr};
-    QGraphicsView * view {nullptr};
+    MyGraphicsView * view {nullptr};
     QFrame * frame {nullptr};
     QLabel * labelTotalTime {nullptr};
 };
 
-void MainWindow::Pimpl::setupUi(QMainWindow *parent_, Ui::MainWindow *ui_)
+void MainWindow::Pimpl::setupUi(MainWindow *parent_, Ui::MainWindow *ui_)
 {
     parent = parent_;
     ui = ui_;
     splitter = new QSplitter(parent);
-    view = new QGraphicsView;
+    view = new MyGraphicsView(parent);
     view->setMinimumWidth(500);
 
     QVBoxLayout *frameLayout = new QVBoxLayout;
@@ -78,6 +78,9 @@ void MainWindow::Pimpl::setupUi(QMainWindow *parent_, Ui::MainWindow *ui_)
     splitter->addWidget(frame);
 
     parent->centralWidget()->layout()->addWidget(splitter);
+
+
+    connect(view, SIGNAL(positionX(int)), parent, SLOT(drawInfoInStatusBar(int)));
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -212,5 +215,10 @@ void MainWindow::openRecent()
     if (action) {
         _impl->loadFile(action->data().toString());
     }
+}
+
+void MainWindow::drawInfoInStatusBar(int y)
+{
+    ui->statusbar->showMessage(QString::number(y));
 }
 
