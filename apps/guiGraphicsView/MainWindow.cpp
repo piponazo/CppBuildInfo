@@ -22,6 +22,7 @@
 
 namespace
 {
+    const qint64 HEIGHT = 30;
     void getNextCoordinates(std::vector<CompilationProcess> &concurrentProcs,
                             const CompilationProcess & nextProc,
                             qint64 &nextY)
@@ -29,7 +30,7 @@ namespace
         for (size_t i = 0; i<concurrentProcs.size(); i++) {
             if (concurrentProcs[i].end < nextProc.start) {
                 concurrentProcs[i] = nextProc;
-                nextY = static_cast<qint64>(i) * 22;
+                nextY = static_cast<qint64>(i) * (HEIGHT * 1.2);
                 break;
             }
         }
@@ -159,7 +160,7 @@ void MainWindow::Pimpl::loadFile(const QString &path)
     for (const auto & p : processes) {
         getNextCoordinates(concurrentProcs, p, y);
         auto * item = new CompilationProcessGraphicItem(p.fileName(), p.start - xStart, y,
-                                                        p.duration(), 20);
+                                                        p.duration(), HEIGHT);
         scene->addItem(item);
     }
 
@@ -167,8 +168,8 @@ void MainWindow::Pimpl::loadFile(const QString &path)
     rect.setX(processes.front().start);
     rect.setY(0);
 //    rect.setWidth(parser.getTotalTime());
-    rect.setWidth(1000);
-    rect.setHeight(y);
+    rect.setWidth(parser.getTotalTime()/2);
+    rect.setHeight(nConcurrentProcs * HEIGHT * 2);
 
     view->setScene(scene);
     labelTotalTime->setText(QString("Total time: %1 msecs").arg(parser.getTotalTime()));

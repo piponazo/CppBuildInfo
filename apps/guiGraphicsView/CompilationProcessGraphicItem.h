@@ -28,5 +28,5 @@ public:
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 
 private:
-    QString _fileName;
+        QString _fileName;
 };
