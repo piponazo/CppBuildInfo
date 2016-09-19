@@ -20,6 +20,10 @@
 #include <QLabel>
 #include <QFrame>
 
+// ------------------------------------------------------------------------------------------------
+// Private implementation
+// ------------------------------------------------------------------------------------------------
+
 namespace
 {
     const qint64 HEIGHT = 30;
@@ -81,24 +85,6 @@ void MainWindow::Pimpl::setupUi(MainWindow *parent_, Ui::MainWindow *ui_)
 
 
     connect(view, SIGNAL(positionX(int)), parent, SLOT(drawInfoInStatusBar(int)));
-}
-
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-    , _impl(new Pimpl)
-{
-    ui->setupUi(this);
-    _impl->setupUi(this, ui);
-
-    _impl->createActionsAndConnections();
-    _impl->createMenus();
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-    delete _impl;
 }
 
 void MainWindow::Pimpl::createActionsAndConnections()
@@ -198,6 +184,29 @@ void MainWindow::Pimpl::saveIntoRecentList(const QString &path)
     // see note
     updateRecentActionList();
 }
+
+// ------------------------------------------------------------------------------------------------
+// MainWindow public implementation
+// ------------------------------------------------------------------------------------------------
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+    , _impl(new Pimpl)
+{
+    ui->setupUi(this);
+    _impl->setupUi(this, ui);
+
+    _impl->createActionsAndConnections();
+    _impl->createMenus();
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+    delete _impl;
+}
+
 
 void MainWindow::on_actionOpenFile_triggered()
 {
