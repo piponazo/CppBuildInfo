@@ -34,7 +34,7 @@ namespace
         for (size_t i = 0; i<concurrentProcs.size(); i++) {
             if (concurrentProcs[i].end < nextProc.start) {
                 concurrentProcs[i] = nextProc;
-                nextY = static_cast<qint64>(i) * (HEIGHT * 1.2);
+                nextY = i * HEIGHT * 1.2;
                 break;
             }
         }
@@ -55,6 +55,7 @@ struct MainWindow::Pimpl
     QList<QAction*> recentFileActionList;
     QString currentFilePath;
     const int maxFileNr {5};
+    int maxY {0};
 
     MainWindow * parent {nullptr};
     Ui::MainWindow *ui {nullptr};
@@ -84,7 +85,6 @@ void MainWindow::Pimpl::setupUi(MainWindow *parent_, Ui::MainWindow *ui_)
     parent->centralWidget()->layout()->addWidget(splitter);
 
 
-    connect(view, SIGNAL(positionX(int)), parent, SLOT(drawInfoInStatusBar(int)));
 }
 
 void MainWindow::Pimpl::createActionsAndConnections()
@@ -159,12 +159,15 @@ void MainWindow::Pimpl::loadFile(const QString &path)
 //    rect.setWidth(parser.getTotalTime());
     rect.setWidth(parser.getTotalTime()/2);
     rect.setHeight(nConcurrentProcs * HEIGHT * 2);
+    maxY = static_cast<int>(rect.height());
 
     view->setScene(scene);
     labelTotalTime->setText(QString("Total time: %1 msecs").arg(parser.getTotalTime()));
 
     view->fitInView(rect);
     saveIntoRecentList(path);
+
+    connect(view, SIGNAL(positionX(int)), parent, SLOT(drawInfoInStatusBar(int)));
 }
 
 void MainWindow::Pimpl::saveIntoRecentList(const QString &path)
@@ -226,8 +229,11 @@ void MainWindow::openRecent()
     }
 }
 
-void MainWindow::drawInfoInStatusBar(int y)
+void MainWindow::drawInfoInStatusBar(int x)
 {
-    ui->statusbar->showMessage(QString::number(y));
+    auto scene = _impl->view->scene();
+    QRectF rect(x, 0, 1, _impl->maxY);
+    auto items = scene->items(rect);
+    ui->statusbar->showMessage(QString(tr("Concurrent compilations: %1")).arg(items.size()));
 }
 

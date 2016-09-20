@@ -17,7 +17,7 @@ public:
 private slots:
     void on_actionOpenFile_triggered();
     void openRecent();
-    void drawInfoInStatusBar(int y);
+    void drawInfoInStatusBar(int x);
 
 private:
     Ui::MainWindow *ui;

@@ -28,6 +28,7 @@ CompilationProcessGraphicItem::CompilationProcessGraphicItem(const QString &file
     : QGraphicsRectItem (x, y, width, height, parent)
     , _fileName(fileName)
 {
+    qDebug() << "Item created at: " << x << y << width << height;
     setToolTip(fileName);
 }
 
