@@ -13,6 +13,7 @@
 
 #include <QMessageBox>
 #include <QSplitter>
+#include <QCloseEvent>
 
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
@@ -83,8 +84,6 @@ void MainWindow::Pimpl::setupUi(MainWindow *parent_, Ui::MainWindow *ui_)
     splitter->addWidget(frame);
 
     parent->centralWidget()->layout()->addWidget(splitter);
-
-
 }
 
 void MainWindow::Pimpl::createActionsAndConnections()
@@ -202,6 +201,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     _impl->createActionsAndConnections();
     _impl->createMenus();
+
+    readWindowSettings();
 }
 
 MainWindow::~MainWindow()
@@ -235,5 +236,20 @@ void MainWindow::drawInfoInStatusBar(int x)
     QRectF rect(x, 0, 1, _impl->maxY);
     auto items = scene->items(rect);
     ui->statusbar->showMessage(QString(tr("Concurrent compilations: %1")).arg(items.size()));
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    QSettings settings;
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("windowState", saveState());
+    QMainWindow::closeEvent(event);
+}
+
+void MainWindow::readWindowSettings()
+{
+    QSettings settings;
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("windowState").toByteArray());
 }
 
