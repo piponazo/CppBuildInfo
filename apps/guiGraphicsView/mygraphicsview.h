@@ -10,6 +10,7 @@ public:
 
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void wheelEvent(QWheelEvent* event);
+    virtual void keyPressEvent(QKeyEvent *event);
 
 signals:
     void positionX(int x);
