@@ -2,6 +2,7 @@
 
 #include <QString>
 #include <vector>
+#include <memory>
 
 struct CompilationProcess;
 
@@ -27,5 +28,5 @@ private:
     bool parseData();
 
     struct Pimpl;
-    Pimpl * _impl;
+    std::unique_ptr<Pimpl> _impl;
 };

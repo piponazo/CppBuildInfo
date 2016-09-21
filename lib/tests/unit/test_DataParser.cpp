@@ -29,10 +29,15 @@ TEST(LibCppBuildInfoDataParser, shouldCreateInstanceWithEmptyFileAndReadNothing)
 
 TEST(LibCppBuildInfoDataParser, shouldCreateInstanceWithValidDataAndReadValues)
 {
-    const QString path = QString(TEST_DATA_PATH) + "/fakeFile8ConcurrentCompilations.txt";
-    DataParser instance (path);
-
+    DataParser instance (QString(TEST_DATA_PATH) + "/fakeFile4ConcurrentCompilations.txt");
     EXPECT_FALSE(instance.getAllProcesses().empty());
-    EXPECT_EQ(static_cast<std::size_t>(8), instance.getNConcurrentProcesses());
-    EXPECT_EQ(static_cast<std::size_t>(7988), instance.getTotalTime());
+    EXPECT_EQ(static_cast<std::size_t>(4), instance.getNConcurrentProcesses());
+
+    DataParser instance2 (QString(TEST_DATA_PATH) + "/fakeFile5ConcurrentCompilations.txt");
+    EXPECT_FALSE(instance2.getAllProcesses().empty());
+    EXPECT_EQ(static_cast<std::size_t>(5), instance2.getNConcurrentProcesses());
+
+    DataParser instance3 (QString(TEST_DATA_PATH) + "/fakeFile6ConcurrentCompilations.txt");
+    EXPECT_FALSE(instance3.getAllProcesses().empty());
+    EXPECT_EQ(static_cast<std::size_t>(6), instance3.getNConcurrentProcesses());
 }

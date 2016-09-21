@@ -19,4 +19,3 @@
 /home/luis/job/master/pix4d-mapper/src/foundation/src/file/mkdtempImpl.cpp 1474395836004 1474395837021
 /home/luis/job/master/pix4d-mapper/src/foundation/src/file/file.cpp 1474395835167 1474395837055
 /home/luis/job/master/pix4d-mapper/src/foundation/src/file/EphemeralDir.cpp 1474395836485 1474395837495
-/usr/bin/c++ 1474395837500 1474395837623

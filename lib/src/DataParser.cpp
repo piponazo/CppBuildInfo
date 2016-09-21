@@ -45,13 +45,12 @@ DataParser::DataParser(const QString &path)
         throw std::runtime_error("File does not exist: " + path.toStdString());
     }
 
-    _impl = new Pimpl(path);
+    _impl = std::unique_ptr<Pimpl>(new Pimpl(path));
     parseData();
 }
 
 DataParser::~DataParser()
 {
-    delete _impl;
 }
 
 const std::vector<CompilationProcess> DataParser::getAllProcesses() const
@@ -93,7 +92,7 @@ bool DataParser::parseData()
 
     while (!stream.atEnd()) {
         line = stream.readLine();
-        tokens = line.split(" ");
+        tokens = line.split(QRegExp("\\s+"));
 
         absolutePath = tokens.at(0);
         start = tokens.at(1).toLongLong(&okStart);
@@ -103,27 +102,35 @@ bool DataParser::parseData()
             qWarning() << "Error parsing line" << lineNumber;
             return false;
         } else {
-            _impl->processCompilationProcess(absolutePath, start, end);
+            _impl->allProcs.emplace_back(absolutePath, start, end);
         }
 
         lineNumber++;
     }
+
+    std::sort(_impl->allProcs.begin(), _impl->allProcs.end(),
+        [](const CompilationProcess & a, const CompilationProcess & b) -> bool
+        {
+            return a.start < b.start;
+        });
+
+    for (const auto & p : _impl->allProcs) {
+        _impl->processCompilationProcess(p.absolutePath, p.start, p.end);
+    }
+
 
     _impl->concurrentProcs.clear();
 
     return true;
 }
 
-void DataParser::Pimpl::processCompilationProcess(const QString &path,
-                                                  const qint64 start,
-                                                  const qint64 end)
+void DataParser::Pimpl::processCompilationProcess(const QString &path, const qint64 start, const qint64 end)
 {
     if (!concurrentProcs.empty() && concurrentProcs.back().end < start) {
         concurrentProcs.pop_back();
     }
 
     concurrentProcs.emplace_back(path, start, end);
-    allProcs.emplace_back(path, start, end);
 
     std::sort(concurrentProcs.begin(), concurrentProcs.end(), std::greater<CompilationProcess>());
     maxProcs = std::max(maxProcs, concurrentProcs.size());
