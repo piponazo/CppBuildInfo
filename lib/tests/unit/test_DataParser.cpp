@@ -19,7 +19,7 @@ TEST(LibCppBuildInfoDataParser, shouldCreateInstanceWithEmptyFileAndReadNothing)
     QFile file(path);
     ASSERT_TRUE(file.open(QIODevice::WriteOnly | QIODevice::Text));
     file.close();
-    ASSERT_TRUE(QFileInfo::exists(path));
+    ASSERT_TRUE(QFile::exists(path));
 
     DataParser instance (path);
     EXPECT_TRUE(instance.getAllProcesses().empty());
