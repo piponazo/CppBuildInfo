@@ -13,4 +13,4 @@ source_group("UIs" FILES ${uis})
 
 add_executable(gui2 ${sources} ${headers} ${uis})
 
-target_link_libraries(gui2 Qt5::Widgets CppBuildInfo)
+target_link_libraries(gui2 Qt4::QtGui CppBuildInfo)

@@ -7,7 +7,7 @@ add_library(CppBuildInfo ${sources} ${headers})
 #set_target_properties(CppBuildInfo PROPERTIES CXX_VISIBILITY_PRESET hidden)
 #generate_export_header(CppBuildInfo EXPORT_FILE_NAME "${CMAKE_BINARY_DIR}/gbi_export.h")
 
-target_link_libraries(CppBuildInfo PUBLIC Qt5::Core)
+target_link_libraries(CppBuildInfo PUBLIC Qt4::QtCore)
 
 target_include_directories(CppBuildInfo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

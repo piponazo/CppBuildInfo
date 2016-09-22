@@ -1,10 +1,10 @@
 #include <CppBuildInfo/DataParser.h>
 #include <CppBuildInfo/CompilationProcess.h>
 
-#include <QFileInfo>
 #include <QFile>
 #include <QTextStream>
 #include <QTime>
+#include <QStringList>
 
 #include <QDebug>
 
@@ -40,7 +40,7 @@ struct DataParser::Pimpl
 DataParser::DataParser(const QString &path)
     : _impl(nullptr)
 {
-    if (!QFileInfo::exists(path))
+    if (!QFile::exists(path))
     {
         throw std::runtime_error("File does not exist: " + path.toStdString());
     }
