@@ -29,7 +29,7 @@ CompilationProcessGraphicItem::CompilationProcessGraphicItem(const QString &file
     , _fileName(fileName)
 {
     qDebug() << "Item created at: " << x << y << width << height;
-    setToolTip(fileName);
+    setToolTip(QString("File: %1\nDuration: %2 msecs").arg(fileName).arg(width));
 }
 
 void CompilationProcessGraphicItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
