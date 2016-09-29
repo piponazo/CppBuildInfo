@@ -10,18 +10,18 @@ This project includes two applications:
 
 ## Configuration of this project with CMake
 
-This application only depends on Qt 5.7. These are some of the reasons of this choose:
+This application only depends on Qt 4.8. Initially I tried QtCharts (included in 5.7) but at the end
+I ended up using the Qt Graphics View Framework included since Qt 4.
 
-* QtCore for simplifying the execution of the compilation command (with QProcess). It should be platform-independent.
-* QtWidgets and QtCharts for the graphical application.
-
-In order to configure the project properly with cmake, you will need to specify the path of your Qt5 installation directory with *CMAKE_PREFIX_PATH*:
+In order to configure the project properly with CMake, you could need to set the QTDIR environment 
+variable and add the qmake executable to your PATH. This will depend on the Operative System used. 
+Normally on Linux you do not need to take care of that. Therefore, the configuration of the project
+should be as easy as:
 
 ```text
-CppBuildInfo$ mkdir buildRelease && cd buildRelease
-CppBuildInfo/buildRelease$ cmake ../ -DCMAKE_PREFIX_PATH=/opt/Qt5.7.0/5.7/gcc_64/
+CppBuildInfo$ mkdir build && cd build
+CppBuildInfo/buildRelease$ cmake ../ 
 ```
-
 
 ## Integration with your C++ projects
 
