@@ -1,7 +1,13 @@
+# https://docs.travis-ci.com/user/ci-environment/
+# https://docs.travis-ci.com/user/languages/cpp/
+
 language: cpp
+sudo: required
+dist: trusty
 
 compiler: 
     - gcc
+    - clang
 
 before_install:
     # g++4.8
@@ -19,7 +25,7 @@ install:
     - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 80 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8 --slave /usr/bin/gcov gcov /usr/bin/gcov-4.8; fi
 
     # CMake newest version
-    - sudo apt-get install --allow-unauthenticated -qq cmake qt4-dev-tools
+    - sudo apt-get install -qq cmake qt4-dev-tools
 
     # Install lcov
     #- wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz -O /tmp/lcov.tar.gz
