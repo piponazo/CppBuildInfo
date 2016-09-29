@@ -44,3 +44,7 @@ script:
     - make
     - bin/tests
       # - if [ "$CXX" = "g++" ]; then coveralls -E "/usr/.*" -E "build/*.h" -E ".*/CMakeFiles/.*" --root $SRC_DIR --build-root $BIN_DIR;  fi
+      #
+
+after_success:
+  - coveralls
