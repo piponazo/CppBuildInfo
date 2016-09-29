@@ -6,8 +6,11 @@ sudo: required
 dist: trusty
 
 compiler: 
-    - gcc
-    - clang
+- gcc
+  #- clang
+os:
+    #- linux
+    #- osx
 
 before_install:
     # g++4.8
@@ -39,5 +42,5 @@ before_script:
 script:
     - cd build
     - make
-    - bin/test
+    - bin/tests
       # - if [ "$CXX" = "g++" ]; then coveralls -E "/usr/.*" -E "build/*.h" -E ".*/CMakeFiles/.*" --root $SRC_DIR --build-root $BIN_DIR;  fi
