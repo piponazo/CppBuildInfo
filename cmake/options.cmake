@@ -17,6 +17,7 @@ option(WARNINGS_ARE_ERRORS  "Treat warnings as errors"                          
 option(WARNINGS_ANSI_ISO    "Issue all the mandatory diagnostics Listed in C standard" ON)
 
 option(COMPILE_TESTS        "Compile the unit tests for the library"                   OFF)
+option(COMPILE_CURSES_APP   "Compile the ncurses application"                          OFF)
 
 #set(CMAKE_INCLUDE_DIRS_CONFIGCMAKE ${CMAKE_INSTALL_PREFIX}/include      CACHE PATH "Output directory for headers")
 #set(CMAKE_LIB_DIRS_CONFIGCMAKE     ${CMAKE_INSTALL_PREFIX}/lib          CACHE PATH "Output directory for libraries")

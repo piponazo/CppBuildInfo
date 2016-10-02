@@ -1,4 +1,5 @@
 find_package(Qt4 COMPONENTS QtGui QtCore REQUIRED)
+find_package(Curses)
 
 if (COMPILE_TESTS)
     add_subdirectory(${CMAKE_SOURCE_DIR}/cmake/ext/gtest)
