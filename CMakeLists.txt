@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.2)
 project(CppBuildInfo LANGUAGES CXX VERSION 0.0.1)
 
-include(ExternalProject)
+if (EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_set_find_paths()
+else()
+    message(WARNING "You can use conan to install the project dependencies")
+endif()
 
 include(cmake/options.cmake               REQUIRED)
 include(cmake/findDependencies.cmake      REQUIRED)
