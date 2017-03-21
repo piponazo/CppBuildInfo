@@ -1,9 +1,8 @@
-project(CppBuildInfo)
 cmake_minimum_required(VERSION 3.2)
+project(CppBuildInfo LANGUAGES CXX VERSION 0.0.1)
 
 include(ExternalProject)
 
-include(cmake/versions.cmake              REQUIRED)
 include(cmake/options.cmake               REQUIRED)
 include(cmake/findDependencies.cmake      REQUIRED)
 include(cmake/compilerDefinitions.cmake   REQUIRED)
