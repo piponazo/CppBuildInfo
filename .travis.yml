@@ -30,6 +30,9 @@ install:
     # CMake newest version
     - sudo apt-get install -qq cmake qt4-dev-tools
 
+    # CMake newest version
+    - ./travis/installConan.sh
+
     # Install lcov
     #- wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz -O /tmp/lcov.tar.gz
     #- cd /tmp/ && tar xf lcov.tar.gz
