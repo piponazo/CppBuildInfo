@@ -30,6 +30,7 @@
 
 # QtCreator
 CMakeLists.txt.user
+*.autosave
 
 # build directories
 build*
