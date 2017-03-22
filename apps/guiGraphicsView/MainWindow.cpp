@@ -131,7 +131,8 @@ void MainWindow::Pimpl::updateRecentActionList()
 
 void MainWindow::Pimpl::loadFile(const QString &path)
 {
-    DataParser parser(path);
+    DataParser parser;
+    parser.parse(path);
     const auto & processes = parser.getAllProcesses();
     const size_t nConcurrentProcs = parser.getNConcurrentProcesses();
     if (processes.empty()) {

@@ -37,21 +37,8 @@ struct DataParser::Pimpl
 // Public class methods
 // -------------------------------------------------------------------------------------------------
 
-DataParser::DataParser(const QString &path)
-    : _impl(nullptr)
-{
-    if (!QFile::exists(path))
-    {
-        throw std::runtime_error("File does not exist: " + path.toStdString());
-    }
-
-    _impl = std::unique_ptr<Pimpl>(new Pimpl(path));
-    parseData();
-}
-
-DataParser::~DataParser()
-{
-}
+DataParser::DataParser() = default;
+DataParser::~DataParser() = default;
 
 const std::vector<CompilationProcess> DataParser::getAllProcesses() const
 {
@@ -76,10 +63,18 @@ std::size_t DataParser::getTotalTime() const
 // Private class methods
 // -------------------------------------------------------------------------------------------------
 
-bool DataParser::parseData()
+bool DataParser::parse(const QString &path)
 {
+    if (!QFile::exists(path))
+    {
+        qWarning() << "File does not exist:" << path;
+        return false;
+    }
+
+    _impl = std::make_unique<Pimpl>(path);
+
     if (!_impl->file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "Error opening file";
+        qWarning() << "Error opening file: " << path;
         return false;
     }
 
@@ -94,6 +89,11 @@ bool DataParser::parseData()
     while (!stream.atEnd()) {
         line = stream.readLine();
         tokens = line.split(QRegExp("\\s+"));
+
+        if (tokens.size() != 3) {
+            qWarning() << "Error parsing line" << lineNumber << "incorrect number of tokens";
+            return false;
+        }
 
         absolutePath = tokens.at(0);
         start = tokens.at(1).toLongLong(&okStart);

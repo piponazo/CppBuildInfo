@@ -7,37 +7,48 @@
 #include <QFile>
 #include <QDir>
 
-TEST(LibCppBuildInfoDataParser, shouldCreateInstanceWithNonExistingFileAndThrowException)
+TEST(ADataParser, doNotParseNonExistingFile)
 {
-    const QString path = QDir::tempPath() + "/NonExistingFile.txt";
-    EXPECT_THROW(DataParser instance (path), std::runtime_error);
+    const QString path (QDir::tempPath() + "/NonExistingFile.txt");
+    DataParser parser;
+    ASSERT_FALSE(parser.parse(path));
 }
 
-TEST(LibCppBuildInfoDataParser, shouldCreateInstanceWithEmptyFileAndReadNothing)
+TEST(ADataParser, doNotDetectProcessesInEmptyFile)
 {
-    const QString path = QDir::tempPath() + "/EmptyFile.txt";
+    const QString path (QDir::tempPath() + "/EmptyFile.txt");
     QFile file(path);
     ASSERT_TRUE(file.open(QIODevice::WriteOnly | QIODevice::Text));
     file.close();
     ASSERT_TRUE(QFile::exists(path));
 
-    DataParser instance (path);
-    EXPECT_TRUE(instance.getAllProcesses().empty());
-    EXPECT_EQ(static_cast<std::size_t>(0), instance.getNConcurrentProcesses());
-    EXPECT_EQ(static_cast<std::size_t>(0), instance.getTotalTime());
+    DataParser parser;
+    ASSERT_TRUE(parser.parse(path));
+    EXPECT_TRUE(parser.getAllProcesses().empty());
+    EXPECT_EQ(static_cast<std::size_t>(0), parser.getNConcurrentProcesses());
+    EXPECT_EQ(static_cast<std::size_t>(0), parser.getTotalTime());
 }
 
-TEST(LibCppBuildInfoDataParser, shouldCreateInstanceWithValidDataAndReadValues)
+TEST(ADataParser, doNotDetectProcessesInFilesWithBadFormat)
 {
-    DataParser instance (QString(TEST_DATA_PATH) + "/fakeFile4ConcurrentCompilations.txt");
-    EXPECT_FALSE(instance.getAllProcesses().empty());
-    EXPECT_EQ(static_cast<std::size_t>(4), instance.getNConcurrentProcesses());
+    DataParser parser;
+    ASSERT_FALSE(parser.parse(QString(TEST_DATA_PATH) + "/badFileWithLessFieldsPerLine.txt"));
+    ASSERT_FALSE(parser.parse(QString(TEST_DATA_PATH) + "/badFileWithMoreFieldsPerLine.txt"));
+    ASSERT_FALSE(parser.parse(QString(TEST_DATA_PATH) + "/badFileWithBadTypes.txt"));
+}
 
-    DataParser instance2 (QString(TEST_DATA_PATH) + "/fakeFile5ConcurrentCompilations.txt");
-    EXPECT_FALSE(instance2.getAllProcesses().empty());
-    EXPECT_EQ(static_cast<std::size_t>(5), instance2.getNConcurrentProcesses());
+TEST(ADataParser, detectProcessesInNonProperEmptyFiles)
+{
+    DataParser parser;
+    parser.parse(QString(TEST_DATA_PATH) + "/fakeFile4ConcurrentCompilations.txt");
+    EXPECT_FALSE(parser.getAllProcesses().empty());
+    EXPECT_EQ(std::size_t(4), parser.getNConcurrentProcesses());
 
-    DataParser instance3 (QString(TEST_DATA_PATH) + "/fakeFile6ConcurrentCompilations.txt");
-    EXPECT_FALSE(instance3.getAllProcesses().empty());
-    EXPECT_EQ(static_cast<std::size_t>(6), instance3.getNConcurrentProcesses());
+    parser.parse(QString(TEST_DATA_PATH) + "/fakeFile5ConcurrentCompilations.txt");
+    EXPECT_FALSE(parser.getAllProcesses().empty());
+    EXPECT_EQ(std::size_t(5), parser.getNConcurrentProcesses());
+
+    parser.parse(QString(TEST_DATA_PATH) + "/fakeFile6ConcurrentCompilations.txt");
+    EXPECT_FALSE(parser.getAllProcesses().empty());
+    EXPECT_EQ(std::size_t(6), parser.getNConcurrentProcesses());
 }

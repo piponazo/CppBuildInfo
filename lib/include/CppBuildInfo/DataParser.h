@@ -13,23 +13,27 @@ struct CompilationProcess;
 class DataParser
 {
 public:
-    /// Constructor.
-    /// @param [in] path to file containing compilation times
-    DataParser(const QString &path);
+    DataParser();
 
     /// Destructor.
     ~DataParser();
 
+    // --------------------------------------------------------------------------------------------
+
+    /// @brief Gets CompilationProcess (es) parsed.
     const std::vector<CompilationProcess> getAllProcesses() const;
 
-    /// Gets the number of concurrent compilation processes
+    /// @brief Gets the number of concurrent compilation processes.
     std::size_t getNConcurrentProcesses() const;
 
-    /// Gets the total time of the compilation [in msecs]
+    /// @brief Gets the total time of the compilation [in msecs].
     std::size_t getTotalTime() const;
 
+    // --------------------------------------------------------------------------------------------
+
+    bool parse(const QString &path);
+
 private:
-    bool parseData();
 
     struct Pimpl;
     std::unique_ptr<Pimpl> _impl;
