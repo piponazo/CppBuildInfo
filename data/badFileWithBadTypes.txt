@@ -1,0 +1,4 @@
+a /home/luis/job/master/pix4d-mapper/src/foundation/src/foundation_main.cpp 3.4
+a /home/luis/job/master/pix4d-mapper/src/foundation/src/std/ostream.cpp 3.4
+a /home/luis/job/master/pix4d-mapper/src/foundation/src/time/time.cpp 3.4
+a /home/luis/job/master/pix4d-mapper/src/foundation/src/text/text.cpp 3.4
