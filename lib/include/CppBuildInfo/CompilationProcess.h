@@ -20,7 +20,7 @@
 
 #include <QString>
 
-/// Information about a compilation process
+/// Information about a single compilation process
 struct CompilationProcess
 {
 public:
@@ -33,7 +33,7 @@ public:
     bool operator < (const CompilationProcess &o) const;
     bool operator > (const CompilationProcess &o) const;
 
-    QString absolutePath;  ///< File being compiled
-    qint64  start; ///< Time in which the compilation started
-    qint64  end;   ///< Time in which the compilation ended
+    QString absolutePath;   ///< File being compiled
+    qint64  start;          ///< Time in which the compilation started
+    qint64  end;            ///< Time in which the compilation ended
 };

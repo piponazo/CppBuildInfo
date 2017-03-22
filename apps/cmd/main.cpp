@@ -1,3 +1,9 @@
+/* This application append a line into the --outputFile with the following format:
+ *
+ * AbsolutePathToSourceFile.cpp msecsFromEpochInit msecsFromEpochEnd
+ *
+ */
+
 #include <QCoreApplication>
 #include <QProcess>
 #include <QStringList>

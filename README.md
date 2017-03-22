@@ -5,7 +5,7 @@ Application for measuring / analyzing build times in C++ projects.
 
 This project includes two applications:
 
-* A small command line application that must be called suffixing each compilation command (it measures the compilation time)
+* A simple command line application that must be called suffixing each compilation command (it measures the compilation time) for measuring the compilation time.
 * A GUI application for representing the information gathered with the former app.
 
 ## Configuration of this project with CMake

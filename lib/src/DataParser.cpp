@@ -58,6 +58,7 @@ const std::vector<CompilationProcess> DataParser::getAllProcesses() const
     return _impl->allProcs;
 }
 
+/// \todo move this to other file with utilities or functions. We should have an unique responsibility in this class.
 std::size_t DataParser::getNConcurrentProcesses() const
 {
     return _impl->maxProcs;
