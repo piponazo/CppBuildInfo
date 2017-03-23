@@ -6,6 +6,6 @@ tar xf cmake-3.7.2.tar.gz
 cd cmake-3.7.2
 ./configure --parallel=4
 make -j4
-make install
+sudo make install
 cd ..
 rm -rf cmake-*
