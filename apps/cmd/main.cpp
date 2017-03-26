@@ -62,12 +62,14 @@ int main (int argc, char **argv)
 static void processOptions(QStringList &args)
 {
     args.removeFirst(); // The first argument is this own application
+
     qDebug() << "Inputs args" << args;
     const int indexOutputFile = args.indexOf("--outputFile");
     if (indexOutputFile != -1) {
         outputFile = args.at(indexOutputFile+1);
         args.erase(args.begin()+indexOutputFile, args.begin()+(indexOutputFile+2));
     }
+
     qDebug() << "Output args" << args;
 }
 
