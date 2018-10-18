@@ -11,6 +11,10 @@ source_group("Sources" FILES ${sources})
 source_group("Headers" FILES ${headers})
 source_group("UIs" FILES ${uis})
 
-add_executable(gui2 ${sources} ${headers} ${uis})
+add_executable(gui ${sources} ${headers} ${uis})
 
-target_link_libraries(gui2 Qt4::QtGui CppBuildInfo)
+target_link_libraries(gui
+    PRIVATE
+        Qt5::Widgets
+        CppBuildInfo
+)

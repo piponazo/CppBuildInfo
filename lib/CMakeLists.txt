@@ -1,16 +1,36 @@
-file(GLOB_RECURSE sources src/*.cpp)
-file(GLOB_RECURSE headers src/*.h include/*.h)
+set(PUBLIC_HEADERS
+    include/CppBuildInfo/CompilationProcess.h
+    include/CppBuildInfo/CompileUnit.h
+    include/CppBuildInfo/CompilerParserFactory.h
+    include/CppBuildInfo/DataParser.h
+    include/CppBuildInfo/ICompilerParser.h
+)
 
-source_group("Headers" FILES ${headers})
-add_library(CppBuildInfo ${sources} ${headers})
+set(PRIVATE_SOURCES
+    src/CompilationProcess.cpp
+    src/CompilerParserFactory.cpp
+    src/DataParser.cpp
+    src/GccCompilerInterface.cpp
+    src/GccCompilerParser.h
+)
+
+source_group("Headers" FILES ${PUBLIC_HEADERS})
+
+add_library(CppBuildInfo ${PUBLIC_HEADERS} ${PRIVATE_SOURCES})
 
 #set_target_properties(CppBuildInfo PROPERTIES CXX_VISIBILITY_PRESET hidden)
 #generate_export_header(CppBuildInfo EXPORT_FILE_NAME "${CMAKE_BINARY_DIR}/gbi_export.h")
 
-target_link_libraries(CppBuildInfo PUBLIC Qt4::QtCore)
+target_link_libraries(CppBuildInfo
+    PUBLIC
+        Qt5::Core
+)
 
-target_include_directories(CppBuildInfo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(CppBuildInfo PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
 
 if (COMPILE_TESTS)
-	add_subdirectory(tests)
+    add_subdirectory(tests)
 endif()
