@@ -18,21 +18,7 @@ before_install:
     - sudo apt-get update -qq
 
 install: ./travis/install.sh
-    #- bash travis/installCMake.sh
-    #- bash travis/installConan.sh
-    # Install lcov
-    #- wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz -O /tmp/lcov.tar.gz
-    #- cd /tmp/ && tar xf lcov.tar.gz
-    #- sudo make -C lcov-1.11/ install      
-
-#before_script:
-#    - mkdir build && export BIN_DIR=$PWD
-#    - bash travis/cmake.sh
-#
 script: ./travis/run.sh
-
-#after_success:
-#  - coveralls
 
 cache:
     ccache: true

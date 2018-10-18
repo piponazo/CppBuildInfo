@@ -4,8 +4,8 @@ set -x # Prints every command
 
 if [[ "$(uname -s)" == 'Linux' ]]; then
     sudo apt-get install cmake python-pip
-    sudo apt-get install --allow-unauthenticated -qq g++-5 gcc-5
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 80 --slave /usr/bin/g++ g++ /usr/bin/g++-5 --slave /usr/bin/gcov gcov /usr/bin/gcov-5
+    sudo apt-get install --allow-unauthenticated -qq g++-7 gcc-7
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 80 --slave /usr/bin/g++ g++ /usr/bin/g++-7 --slave /usr/bin/gcov gcov /usr/bin/gcov-7
     sudo apt-get install qtbase5-dev qt5-default qttools5-dev-tools
     sudo pip install virtualenv
     virtualenv conan
