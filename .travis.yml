@@ -8,39 +8,28 @@ dist: trusty
 compiler: 
     - gcc
   #- clang
-os:
+  #os:
     #- linux
     #- osx
 
 before_install:
-    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+    - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
     - sudo apt-get update -qq
 
-install:
-    - export SRC_DIR=$PWD
-    - if [ "$CXX" = "g++" ]; then sudo apt-get install --allow-unauthenticated -qq g++-5 gcc-5; fi
-    - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 80 --slave /usr/bin/g++ g++ /usr/bin/g++-5 --slave /usr/bin/gcov gcov /usr/bin/gcov-5; fi
-
-    - sudo apt-get install -qq qt4-dev-tools
-
-    - bash travis/installCMake.sh
-    - bash travis/installConan.sh
-
+install: ./travis/install.sh
+    #- bash travis/installCMake.sh
+    #- bash travis/installConan.sh
     # Install lcov
     #- wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz -O /tmp/lcov.tar.gz
     #- cd /tmp/ && tar xf lcov.tar.gz
     #- sudo make -C lcov-1.11/ install      
 
-before_script:
-    - export SRC_DIR=$PWD && mkdir build && export BIN_DIR=$PWD
-    - bash travis/cmake.sh
+#before_script:
+#    - mkdir build && export BIN_DIR=$PWD
+#    - bash travis/cmake.sh
+#
+script: ./travis/run.sh
 
-script:
-    - cd build
-    - make
-    - bin/tests
-      # - if [ "$CXX" = "g++" ]; then coveralls -E "/usr/.*" -E "build/*.h" -E ".*/CMakeFiles/.*" --root $SRC_DIR --build-root $BIN_DIR;  fi
-      #
-
-after_success:
-  - coveralls
+#after_success:
+#  - coveralls
