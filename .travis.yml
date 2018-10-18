@@ -33,3 +33,9 @@ script: ./travis/run.sh
 
 #after_success:
 #  - coveralls
+
+cache:
+    ccache: true
+    directories:
+    - conan             # Conan installation folder
+    - $HOME/conanData   # Conan storage location
