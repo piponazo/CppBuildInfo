@@ -1,15 +1,12 @@
 file(GLOB_RECURSE sources unit/*.cpp)
-set(DATA_FILES
-	${PROJECT_SOURCE_DIR}/data/fakeFile4ConcurrentCompilations.txt
-	${PROJECT_SOURCE_DIR}/data/fakeFile5ConcurrentCompilations.txt
-	${PROJECT_SOURCE_DIR}/data/fakeFile6ConcurrentCompilations.txt
-	${PROJECT_SOURCE_DIR}/data/badFileWithLessFieldsPerLine.txt
-	${PROJECT_SOURCE_DIR}/data/badFileWithMoreFieldsPerLine.txt
-	${PROJECT_SOURCE_DIR}/data/badFileWithBadTypes.txt
-)
 
-add_executable(tests main.cpp ${sources} ${DATA_FILES})
-target_link_libraries(tests CppBuildInfo GTest::GTest)
+add_executable(tests main.cpp ${sources} gtestWrapper.h)
+
+target_link_libraries(tests
+    PRIVATE
+        CppBuildInfo
+        GTest::GTest
+)
 
 # Configuration file
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/tests_config.h")

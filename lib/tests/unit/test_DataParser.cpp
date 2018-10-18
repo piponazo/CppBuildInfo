@@ -1,6 +1,7 @@
 #include <CppBuildInfo/DataParser.h>
 #include <CppBuildInfo/CompilationProcess.h>
-#include <gtest/gtest.h>
+
+#include "../gtestWrapper.h"
 
 #include "tests_config.h"
 
