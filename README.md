@@ -10,17 +10,18 @@ This project includes two applications:
 
 ## Configuration of this project with CMake
 
-This application only depends on Qt 4.8. Initially I tried QtCharts (included in 5.7) but at the end
-I ended up using the Qt Graphics View Framework included since Qt 4.
+This application only depends on Qt 5.9 (and GTest for compiling and running the tests).
 
-In order to configure the project properly with CMake, you could need to set the QTDIR environment 
-variable and add the qmake executable to your PATH. This will depend on the Operative System used. 
+In order to configure the project properly with CMake, you could need to set the QTDIR environment
+variable and add the directory where the qmake executable is your PATH environment variable. This
+will depend on the Operative System used.
+
 Normally on Linux you do not need to take care of that. Therefore, the configuration of the project
 should be as easy as:
 
 ```text
 CppBuildInfo$ mkdir build && cd build
-CppBuildInfo/buildRelease$ cmake ../ 
+CppBuildInfo/buildRelease$ cmake -DCMAKE_PREFIX_PATH=/path/to/Qt/installation ../ 
 ```
 
 ## Integration with your C++ projects
@@ -31,5 +32,5 @@ For prefixing cppTimeBuild before each compilation command, you just need to set
 
 ```text
 set_property(GLOBAL PROPERTY RULE_MESSAGES OFF)
-set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "/usr/local/bin/cppTimeClient --outputFile /tmp/prueba.txt")
+set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "/usr/local/bin/cppTimeClient --outputFile /tmp/output.txt")
 ```
