@@ -5,36 +5,41 @@
  */
 
 #include <QCoreApplication>
+#include <QDateTime>
+#include <QDebug>
+#include <QFile>
 #include <QProcess>
 #include <QStringList>
-#include <QDateTime>
 #include <QTextStream>
-#include <QFile>
-#include <QDebug>
 
 #include <iostream>
 
 using namespace std;
 
-static QString outputFile;
-static QString sourceFile;
+static bool parseCommandLineArguments(QStringList &args, QString& outputFile);
+static QString getSourceFile(const QStringList &chunks);
 
-static void processOptions(QStringList &args);
-static void getSourceFile(const QStringList &chunks);
-
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
-    const int maxTimeInMsecs = 30000;
-    QCoreApplication app (argc, argv);
+    QCoreApplication app(argc, argv);
+    QCoreApplication::setApplicationName("cbi");
+    QCoreApplication::setApplicationVersion("0.0.1");  /// \todo use version set in CMake
+
     QStringList args = app.arguments();
 
-    processOptions(args);
-    getSourceFile(args);
+    QString outputFile;
+    if (!parseCommandLineArguments(args, outputFile)) {
+        cerr << "Application did not measure times of any command\n";
+        return EXIT_FAILURE;
+    }
+
+    QString sourceFile = getSourceFile(args);
     QString argsTogeter = args.join(" ");
 
     QProcess process;
     process.setProcessChannelMode(QProcess::SeparateChannels);
 
+    const int maxTimeInMsecs = 30000;
     qint64 startTime = QDateTime::currentMSecsSinceEpoch();
     process.start(argsTogeter);
     if (process.waitForFinished(maxTimeInMsecs) == false) {
@@ -59,22 +64,28 @@ int main (int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-static void processOptions(QStringList &args)
+static bool parseCommandLineArguments(QStringList &args, QString& outputFile)
 {
-    args.removeFirst(); // The first argument is this own application
+    args.removeFirst();  // The first argument is this own application
+
+    if (args.empty() || args.indexOf("-h") != -1 || args.indexOf("--help") != -1) {
+        cout << "Syntax: appBinary 'compiler_command_to_be_analyzed' --outputFile fileName\n";
+        return false;
+    }
 
     qDebug() << "Inputs args" << args;
     const int indexOutputFile = args.indexOf("--outputFile");
     if (indexOutputFile != -1) {
-        outputFile = args.at(indexOutputFile+1);
-        args.erase(args.begin()+indexOutputFile, args.begin()+(indexOutputFile+2));
+        outputFile = args.at(indexOutputFile + 1);
+        args.erase(args.begin() + indexOutputFile, args.begin() + (indexOutputFile + 2));
     }
 
     qDebug() << "Output args" << args;
+    return true;
 }
 
-static void getSourceFile(const QStringList &chunks)
+static QString getSourceFile(const QStringList &chunks)
 {
     int indexSourceFile = chunks.indexOf("-c");
-    sourceFile  = chunks.at(indexSourceFile + 1);
+    return chunks.at(indexSourceFile + 1);
 }
