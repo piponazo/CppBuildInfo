@@ -5,6 +5,7 @@
 
 #include <CppBuildInfo/DataParser.h>
 #include <CppBuildInfo/TranslationUnit.h>
+#include <CppBuildInfo/utils.h>
 
 #include <QDir>
 #include <QFileDialog>
@@ -134,7 +135,7 @@ void MainWindow::Pimpl::loadFile(const QString &path)
     DataParser parser;
     parser.parse(path);
     const auto & processes = parser.getAllProcesses();
-    const size_t nConcurrentProcs = parser.getNConcurrentProcesses();
+    const size_t nConcurrentProcs = maximumNumberOfParallelCompilations(parser.getAllProcesses());
     if (processes.empty()) {
         QMessageBox::warning(parent, tr("Error parsing the file"),
             tr("Either the data file is empty or the data is incorrect"));
@@ -157,12 +158,13 @@ void MainWindow::Pimpl::loadFile(const QString &path)
     rect.setX(processes.front().start);
     rect.setY(0);
 //    rect.setWidth(parser.getTotalTime());
-    rect.setWidth(parser.getTotalTime()/2);
+    size_t totalTime = getTotalCompilationTime(parser.getAllProcesses());
+    rect.setWidth(totalTime/2);
     rect.setHeight(nConcurrentProcs * HEIGHT * 2);
     maxY = static_cast<int>(rect.height());
 
     view->setScene(scene);
-    labelTotalTime->setText(QString("Total time: %1 msecs").arg(parser.getTotalTime()));
+    labelTotalTime->setText(QString("Total time: %1 msecs").arg(totalTime));
 
     view->fitInView(rect);
     saveIntoRecentList(path);

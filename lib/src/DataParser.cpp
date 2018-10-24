@@ -9,60 +9,28 @@
 #include <QDebug>
 
 #include <algorithm>
-#include <functional>
-
-// -------------------------------------------------------------------------------------------------
-// Private implementation details
-// -------------------------------------------------------------------------------------------------
 
 struct DataParser::Pimpl
 {
     Pimpl (const QString &path)
         : file(path)
-        , maxProcs(0)
     {
     }
 
-    void processCompilationProcess(const QString &path, const qint64 start, const qint64 end);
+    bool parse();
 
-    QFile           file;
-
+    QFile file;
     std::vector<TranslationUnit> allProcs;
-    std::vector<TranslationUnit> concurrentProcs;
-    std::size_t     maxProcs;
 };
 
-
-// -------------------------------------------------------------------------------------------------
-// Public class methods
-// -------------------------------------------------------------------------------------------------
-
 DataParser::DataParser() = default;
+
 DataParser::~DataParser() = default;
 
 const std::vector<TranslationUnit> DataParser::getAllProcesses() const
 {
     return _impl->allProcs;
 }
-
-/// \todo move this to other file with utilities or functions. We should have an unique responsibility in this class.
-std::size_t DataParser::getNConcurrentProcesses() const
-{
-    return _impl->maxProcs;
-}
-
-/// \todo move this to other file with utilities or functions. We should have an unique responsibility in this class.
-std::size_t DataParser::getTotalTime() const
-{
-    if (_impl->allProcs.empty()) {
-        return 0;
-    }
-    return static_cast<std::size_t>(_impl->allProcs.back().end - _impl->allProcs.front().start);
-}
-
-// -------------------------------------------------------------------------------------------------
-// Private class methods
-// -------------------------------------------------------------------------------------------------
 
 bool DataParser::parse(const QString &path)
 {
@@ -73,13 +41,17 @@ bool DataParser::parse(const QString &path)
     }
 
     _impl = std::make_unique<Pimpl>(path);
+    return _impl->parse();
+}
 
-    if (!_impl->file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "Error opening file: " << path;
+bool DataParser::Pimpl::parse()
+{
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Error opening file: " << file.fileName();
         return false;
     }
 
-    QTextStream stream (&_impl->file);
+    QTextStream stream (&file);
     QString line, absolutePath;
     QStringList tokens;
     bool okStart = true, okEnd = true;
@@ -104,36 +76,18 @@ bool DataParser::parse(const QString &path)
             qWarning() << "Error parsing line" << lineNumber;
             return false;
         } else {
-            _impl->allProcs.emplace_back(absolutePath, start, end);
+            allProcs.emplace_back(absolutePath, start, end);
         }
 
         lineNumber++;
     }
 
-    std::sort(_impl->allProcs.begin(), _impl->allProcs.end(),
+    /// \note Not sure if this should be done here or outside of the class.
+    std::sort(allProcs.begin(), allProcs.end(),
         [](const TranslationUnit & a, const TranslationUnit & b) -> bool
         {
             return a.start < b.start;
         });
 
-    for (const auto & p : _impl->allProcs) {
-        _impl->processCompilationProcess(p.absolutePath, p.start, p.end);
-    }
-
-
-    _impl->concurrentProcs.clear();
-
     return true;
-}
-
-void DataParser::Pimpl::processCompilationProcess(const QString &path, const qint64 start, const qint64 end)
-{
-    if (!concurrentProcs.empty() && concurrentProcs.back().end < start) {
-        concurrentProcs.pop_back();
-    }
-
-    concurrentProcs.emplace_back(path, start, end);
-
-    std::sort(concurrentProcs.begin(), concurrentProcs.end(), std::greater<TranslationUnit>());
-    maxProcs = std::max(maxProcs, concurrentProcs.size());
 }

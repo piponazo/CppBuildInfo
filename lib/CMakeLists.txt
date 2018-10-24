@@ -4,6 +4,7 @@ set(PUBLIC_HEADERS
     include/CppBuildInfo/CompilerParserFactory.h
     include/CppBuildInfo/DataParser.h
     include/CppBuildInfo/ICompilerParser.h
+    include/CppBuildInfo/utils.h
 )
 
 set(PRIVATE_SOURCES
@@ -12,6 +13,7 @@ set(PRIVATE_SOURCES
     src/DataParser.cpp
     src/GccCompilerInterface.cpp
     src/GccCompilerParser.h
+    src/utils.cpp
 )
 
 source_group("Headers" FILES ${PUBLIC_HEADERS})

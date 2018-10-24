@@ -16,23 +16,12 @@ public:
     DataParser();
     ~DataParser();
 
-    // --------------------------------------------------------------------------------------------
-
     /// @brief Gets CompilationProcess (es) parsed.
     const std::vector<TranslationUnit> getAllProcesses() const;
-
-    /// @brief Gets the number of concurrent compilation processes.
-    std::size_t getNConcurrentProcesses() const;
-
-    /// @brief Gets the total time of the compilation [in msecs].
-    std::size_t getTotalTime() const;
-
-    // --------------------------------------------------------------------------------------------
 
     bool parse(const QString &path);
 
 private:
-
     struct Pimpl;
     std::unique_ptr<Pimpl> _impl;
 };

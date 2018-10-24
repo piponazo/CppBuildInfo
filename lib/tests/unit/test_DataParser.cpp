@@ -1,5 +1,6 @@
 #include <CppBuildInfo/DataParser.h>
 #include <CppBuildInfo/TranslationUnit.h>
+#include <CppBuildInfo/utils.h>
 
 #include "../gtestWrapper.h"
 
@@ -35,8 +36,6 @@ TEST(ADataParser, parseCorrectlyEmptyFile)
     DataParser parser;
     ASSERT_TRUE(parser.parse(path));
     EXPECT_TRUE(parser.getAllProcesses().empty());
-    EXPECT_EQ(static_cast<std::size_t>(0), parser.getNConcurrentProcesses());
-    EXPECT_EQ(static_cast<std::size_t>(0), parser.getTotalTime());
 }
 
 TEST(ADataParser, failToParseFilesWithBadFormat)
@@ -51,14 +50,5 @@ TEST(ADataParser, detectProcessesInNonProperEmptyFiles)
 {
     DataParser parser;
     parser.parse(QString(TEST_DATA_PATH) + "/fakeFile4ConcurrentCompilations.txt");
-    EXPECT_FALSE(parser.getAllProcesses().empty());
-    EXPECT_EQ(std::size_t(4), parser.getNConcurrentProcesses());
-
-    parser.parse(QString(TEST_DATA_PATH) + "/fakeFile5ConcurrentCompilations.txt");
-    EXPECT_FALSE(parser.getAllProcesses().empty());
-    EXPECT_EQ(std::size_t(5), parser.getNConcurrentProcesses());
-
-    parser.parse(QString(TEST_DATA_PATH) + "/fakeFile6ConcurrentCompilations.txt");
-    EXPECT_FALSE(parser.getAllProcesses().empty());
-    EXPECT_EQ(std::size_t(6), parser.getNConcurrentProcesses());
+    EXPECT_EQ(21, parser.getAllProcesses().size());
 }
