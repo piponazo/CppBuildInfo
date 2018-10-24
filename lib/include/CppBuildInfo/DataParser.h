@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cbi_export.h"
+
 #include <QString>
 #include <vector>
 #include <memory>
@@ -13,13 +15,13 @@ struct TranslationUnit;
 class DataParser
 {
 public:
-    DataParser();
-    ~DataParser();
+    CBI_EXPORT DataParser();
+    CBI_EXPORT ~DataParser();
 
     /// @brief Gets CompilationProcess (es) parsed.
-    const std::vector<TranslationUnit> getAllProcesses() const;
+    CBI_EXPORT const std::vector<TranslationUnit> getAllProcesses() const;
 
-    bool parse(const QString &path);
+    CBI_EXPORT bool parse(const QString &path);
 
 private:
     struct Pimpl;

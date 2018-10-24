@@ -20,8 +20,10 @@ source_group("Headers" FILES ${PUBLIC_HEADERS})
 
 add_library(CppBuildInfo ${PUBLIC_HEADERS} ${PRIVATE_SOURCES})
 
-#set_target_properties(CppBuildInfo PROPERTIES CXX_VISIBILITY_PRESET hidden)
-#generate_export_header(CppBuildInfo EXPORT_FILE_NAME "${CMAKE_BINARY_DIR}/gbi_export.h")
+generate_export_header(CppBuildInfo
+    EXPORT_MACRO_NAME CBI_EXPORT
+    EXPORT_FILE_NAME "${CMAKE_BINARY_DIR}/cbi_export.h"
+)
 
 target_link_libraries(CppBuildInfo
     PUBLIC
@@ -30,6 +32,7 @@ target_link_libraries(CppBuildInfo
 
 target_include_directories(CppBuildInfo PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}> # For the export header
     $<INSTALL_INTERFACE:include>
 )
 

@@ -18,20 +18,22 @@
 
 #pragma once
 
+#include "cbi_export.h"
+
 #include <QString>
 
 /// Compilation information about a single translation unit
 struct TranslationUnit
 {
 public:
-    TranslationUnit();
-    TranslationUnit(const QString &_path, qint64 start, qint64 end);
+    CBI_EXPORT TranslationUnit();
+    CBI_EXPORT TranslationUnit(const QString &_path, qint64 start, qint64 end);
 
-    qint64 duration() const;
-    QString fileName() const;
+    CBI_EXPORT qint64 duration() const;
+    CBI_EXPORT QString fileName() const;
 
-    bool operator < (const TranslationUnit &o) const;
-    bool operator > (const TranslationUnit &o) const;
+    CBI_EXPORT bool operator < (const TranslationUnit &o) const;
+    CBI_EXPORT bool operator > (const TranslationUnit &o) const;
 
     QString absolutePath;   ///< File being compiled
     qint64  start;          ///< Time in which the compilation started
