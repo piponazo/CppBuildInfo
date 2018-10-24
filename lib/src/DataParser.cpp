@@ -1,5 +1,5 @@
 #include <CppBuildInfo/DataParser.h>
-#include <CppBuildInfo/CompilationProcess.h>
+#include <CppBuildInfo/TranslationUnit.h>
 
 #include <QFile>
 #include <QTextStream>
@@ -27,8 +27,8 @@ struct DataParser::Pimpl
 
     QFile           file;
 
-    std::vector<CompilationProcess> allProcs;
-    std::vector<CompilationProcess> concurrentProcs;
+    std::vector<TranslationUnit> allProcs;
+    std::vector<TranslationUnit> concurrentProcs;
     std::size_t     maxProcs;
 };
 
@@ -40,7 +40,7 @@ struct DataParser::Pimpl
 DataParser::DataParser() = default;
 DataParser::~DataParser() = default;
 
-const std::vector<CompilationProcess> DataParser::getAllProcesses() const
+const std::vector<TranslationUnit> DataParser::getAllProcesses() const
 {
     return _impl->allProcs;
 }
@@ -51,6 +51,7 @@ std::size_t DataParser::getNConcurrentProcesses() const
     return _impl->maxProcs;
 }
 
+/// \todo move this to other file with utilities or functions. We should have an unique responsibility in this class.
 std::size_t DataParser::getTotalTime() const
 {
     if (_impl->allProcs.empty()) {
@@ -110,7 +111,7 @@ bool DataParser::parse(const QString &path)
     }
 
     std::sort(_impl->allProcs.begin(), _impl->allProcs.end(),
-        [](const CompilationProcess & a, const CompilationProcess & b) -> bool
+        [](const TranslationUnit & a, const TranslationUnit & b) -> bool
         {
             return a.start < b.start;
         });
@@ -133,6 +134,6 @@ void DataParser::Pimpl::processCompilationProcess(const QString &path, const qin
 
     concurrentProcs.emplace_back(path, start, end);
 
-    std::sort(concurrentProcs.begin(), concurrentProcs.end(), std::greater<CompilationProcess>());
+    std::sort(concurrentProcs.begin(), concurrentProcs.end(), std::greater<TranslationUnit>());
     maxProcs = std::max(maxProcs, concurrentProcs.size());
 }

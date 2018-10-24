@@ -1,5 +1,5 @@
 #include <CppBuildInfo/DataParser.h>
-#include <CppBuildInfo/CompilationProcess.h>
+#include <CppBuildInfo/TranslationUnit.h>
 
 #include "../gtestWrapper.h"
 
@@ -8,19 +8,28 @@
 #include <QFile>
 #include <QDir>
 
-TEST(ADataParser, doNotParseNonExistingFile)
+namespace
+{
+    QString createEmptyFile(const QString fileName)
+    {
+        const QString path (QDir::tempPath() + "/" + fileName);
+        QFile file(path);
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
+        file.close();
+        return path;
+    }
+}
+
+TEST(ADataParser, parseReturnsFalseWithNonExistingFile)
 {
     const QString path (QDir::tempPath() + "/NonExistingFile.txt");
     DataParser parser;
     ASSERT_FALSE(parser.parse(path));
 }
 
-TEST(ADataParser, doNotDetectProcessesInEmptyFile)
+TEST(ADataParser, parseCorrectlyEmptyFile)
 {
-    const QString path (QDir::tempPath() + "/EmptyFile.txt");
-    QFile file(path);
-    ASSERT_TRUE(file.open(QIODevice::WriteOnly | QIODevice::Text));
-    file.close();
+    auto path = createEmptyFile("EmptyFile.txt");
     ASSERT_TRUE(QFile::exists(path));
 
     DataParser parser;
@@ -30,7 +39,7 @@ TEST(ADataParser, doNotDetectProcessesInEmptyFile)
     EXPECT_EQ(static_cast<std::size_t>(0), parser.getTotalTime());
 }
 
-TEST(ADataParser, doNotDetectProcessesInFilesWithBadFormat)
+TEST(ADataParser, failToParseFilesWithBadFormat)
 {
     DataParser parser;
     ASSERT_FALSE(parser.parse(QString(TEST_DATA_PATH) + "/badFileWithLessFieldsPerLine.txt"));

@@ -1,5 +1,5 @@
 set(PUBLIC_HEADERS
-    include/CppBuildInfo/CompilationProcess.h
+    include/CppBuildInfo/TranslationUnit.h
     include/CppBuildInfo/CompileUnit.h
     include/CppBuildInfo/CompilerParserFactory.h
     include/CppBuildInfo/DataParser.h
@@ -7,7 +7,7 @@ set(PUBLIC_HEADERS
 )
 
 set(PRIVATE_SOURCES
-    src/CompilationProcess.cpp
+    src/TranslationUnit.cpp
     src/CompilerParserFactory.cpp
     src/DataParser.cpp
     src/GccCompilerInterface.cpp

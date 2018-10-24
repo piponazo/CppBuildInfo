@@ -16,24 +16,38 @@
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 */
 
-#pragma once
+#include <CppBuildInfo/TranslationUnit.h>
 
-#include <QString>
-
-/// Information about a single compilation process
-struct CompilationProcess
+TranslationUnit::TranslationUnit()
+  : start(0)
+  , end(0)
 {
-public:
-    CompilationProcess();
-    CompilationProcess(const QString &_path, qint64 start, qint64 end);
+}
 
-    qint64 duration() const;
-    QString fileName() const;
+TranslationUnit::TranslationUnit(const QString &_path, qint64 _start, qint64 _end)
+  : absolutePath(_path)
+  , start(_start)
+  , end(_end)
+{
+}
 
-    bool operator < (const CompilationProcess &o) const;
-    bool operator > (const CompilationProcess &o) const;
+qint64 TranslationUnit::duration() const
+{
+    return end - start;
+}
 
-    QString absolutePath;   ///< File being compiled
-    qint64  start;          ///< Time in which the compilation started
-    qint64  end;            ///< Time in which the compilation ended
-};
+QString TranslationUnit::fileName() const
+{
+    const int idxLastSlash = absolutePath.lastIndexOf('/');
+    return absolutePath.mid(idxLastSlash + 1);
+}
+
+bool TranslationUnit::operator <(const TranslationUnit &o) const
+{
+    return end < o.end;
+}
+
+bool TranslationUnit::operator >(const TranslationUnit &o) const
+{
+    return end >= o.end;
+}

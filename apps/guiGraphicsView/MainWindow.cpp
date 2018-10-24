@@ -4,7 +4,7 @@
 #include "mygraphicsview.h"
 
 #include <CppBuildInfo/DataParser.h>
-#include <CppBuildInfo/CompilationProcess.h>
+#include <CppBuildInfo/TranslationUnit.h>
 
 #include <QDir>
 #include <QFileDialog>
@@ -28,8 +28,8 @@
 namespace
 {
     const qint64 HEIGHT = 30;
-    void getNextCoordinates(std::vector<CompilationProcess> &concurrentProcs,
-                            const CompilationProcess & nextProc,
+    void getNextCoordinates(std::vector<TranslationUnit> &concurrentProcs,
+                            const TranslationUnit & nextProc,
                             qint64 &nextY)
     {
         for (size_t i = 0; i<concurrentProcs.size(); i++) {
@@ -144,7 +144,7 @@ void MainWindow::Pimpl::loadFile(const QString &path)
     QGraphicsScene * scene = new QGraphicsScene;
     qint64 xStart = processes[0].start;
     qint64 y = 0;
-    std::vector<CompilationProcess> concurrentProcs (nConcurrentProcs);
+    std::vector<TranslationUnit> concurrentProcs (nConcurrentProcs);
 
     for (const auto & p : processes) {
         getNextCoordinates(concurrentProcs, p, y);
