@@ -17,7 +17,6 @@
 using namespace std;
 
 static bool parseCommandLineArguments(QStringList &args, QString& outputFile);
-static QString getSourceFile(const QStringList &chunks);
 
 int main(int argc, char **argv)
 {
@@ -33,7 +32,6 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    QString sourceFile = getSourceFile(args);
     QString argsTogeter = args.join(" ");
 
     QProcess process;
@@ -43,7 +41,9 @@ int main(int argc, char **argv)
     qint64 startTime = QDateTime::currentMSecsSinceEpoch();
     process.start(argsTogeter);
     if (process.waitForFinished(maxTimeInMsecs) == false) {
+        qint64 endTime = QDateTime::currentMSecsSinceEpoch();
         cerr << "application timeout: " << process.errorString().toStdString() << endl;
+        cerr << "Time: " << endTime - startTime << endl;
         return EXIT_FAILURE;
     }
     qint64 endTime = QDateTime::currentMSecsSinceEpoch();
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
         QFile data(outputFile);
         if (data.open(QFile::WriteOnly | QFile::Append)) {
             QTextStream out(&data);
-            out << sourceFile << " " << startTime << " " << endTime << endl;
+            out << argsTogeter << " " << startTime << " " << endTime << " " << endl;
         } else {
             cerr << "Could not open output file " << outputFile.toStdString() << endl;
             return EXIT_FAILURE;
@@ -82,10 +82,4 @@ static bool parseCommandLineArguments(QStringList &args, QString& outputFile)
 
     qDebug() << "Output args" << args;
     return true;
-}
-
-static QString getSourceFile(const QStringList &chunks)
-{
-    int indexSourceFile = chunks.indexOf("-c");
-    return chunks.at(indexSourceFile + 1);
 }
