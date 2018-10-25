@@ -1,9 +1,9 @@
 set(PUBLIC_HEADERS
+    include/CppBuildInfo/ICompilerParser.h
     include/CppBuildInfo/TranslationUnit.h
     include/CppBuildInfo/CompileUnit.h
     include/CppBuildInfo/CompilerParserFactory.h
     include/CppBuildInfo/DataParser.h
-    include/CppBuildInfo/ICompilerParser.h
     include/CppBuildInfo/utils.h
 )
 

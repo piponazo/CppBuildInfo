@@ -32,5 +32,6 @@ For prefixing cppTimeBuild before each compilation command, you just need to set
 
 ```text
 set_property(GLOBAL PROPERTY RULE_MESSAGES OFF)
-set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "/usr/local/bin/cppTimeClient --outputFile /tmp/output.txt")
+set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "/usr/local/bin/cbi --outputFile /tmp/output.txt")
+set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK    "/usr/local/bin/cbi --outputFile /tmp/output.txt")
 ```

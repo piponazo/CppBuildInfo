@@ -2,6 +2,7 @@ add_executable(tests
     main.cpp
     gtestWrapper.h
     unit/test_DataParser.cpp
+    unit/test_CompilationProcess.cpp
     unit/test_utils.cpp
 )
 

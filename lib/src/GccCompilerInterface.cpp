@@ -17,14 +17,48 @@
 */
 
 #include "GccCompilerParser.h"
-#include <CppBuildInfo/CompilerParserFactory.h>
-#include <QDebug>
 
-CompileUnit GccCompilerParser::parse(const QString &compileLine) const
+#include <CppBuildInfo/CompilerParserFactory.h>
+
+#include <QRegExp>
+#include <QStringList>
+
+namespace
 {
-    qDebug() << "CompileLine: " << compileLine;
+    void assertGccTools(const QString& firstCommand)
+    {
+        if (!firstCommand.endsWith("c++") && !firstCommand.endsWith("ar")) {
+            throw std::runtime_error("no tools related with gcc found");
+        }
+    }
+}  // namespace
+
+CompileUnit GccCompilerParser::parse(const QString& compileLine) const
+{
+    QStringList list = compileLine.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+    assertGccTools(list.first());
+
     CompileUnit ret;
-    ret.name = "fake";
-    ret.type = UnitType::SOURCE;
+
+    if (list.indexOf("-rdynamic") != -1) {
+        const int indexApp = list.indexOf("-o");
+        ret.name = list.at(indexApp + 1).split("/").last();
+        ret.type = UnitType::APPLICATION;
+    } else {
+        const int indexC = list.indexOf("-c");
+        const int indexShared = list.indexOf("-shared");
+        if (indexShared != -1) {
+            ret.name = list.at(indexShared + 1).split(",").last();
+            ret.type = UnitType::SHARED_LIBRARY;
+        } else if (indexC != -1) {
+            ret.name = list.at(indexC + 1);
+            ret.type = UnitType::SOURCE_FILE;
+        } else {
+            // In gcc we have something like: /usr/bin/ar qc path/to/lib.a
+            ret.name = list.at(2).split("/").last();
+            ret.type = UnitType::STATIC_LIBRARY;
+        }
+    }
+
     return ret;
 }

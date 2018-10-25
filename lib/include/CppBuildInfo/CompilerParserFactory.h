@@ -18,7 +18,10 @@
 
 #pragma once
 
+#include "cbi_export.h"
+
 #include "ICompilerParser.h"
+
 #include <memory>
 
 enum class CompilerType {
@@ -26,4 +29,4 @@ enum class CompilerType {
 };
 
 /// @brief Factory method for creating a ICompilerParser
-std::unique_ptr<ICompilerParser> createParser(const CompilerType compiler);
+CBI_EXPORT std::unique_ptr<ICompilerParser> createParser(const CompilerType compiler);
