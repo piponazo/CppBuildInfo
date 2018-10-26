@@ -8,6 +8,6 @@ class ICompilerParser
 public:
     virtual ~ICompilerParser() = default;
 
-    virtual CompileUnit parse(const QString &compileLine) const = 0;
+    virtual CompileUnit parse(const QString &compileLine, ProjectModel& model) const = 0;
 };
 

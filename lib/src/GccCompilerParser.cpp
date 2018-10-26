@@ -20,6 +20,7 @@
 
 #include <CppBuildInfo/CompilerParserFactory.h>
 
+#include <QDebug>
 #include <QRegExp>
 #include <QStringList>
 
@@ -27,13 +28,27 @@ namespace
 {
     void assertGccTools(const QString& firstCommand)
     {
-        if (!firstCommand.endsWith("c++") && !firstCommand.endsWith("ar")) {
+        if (!firstCommand.endsWith("c++") && !firstCommand.endsWith("ar") && !firstCommand.endsWith("ranlib")) {
             throw std::runtime_error("no tools related with gcc found");
         }
     }
+
+    void addStaticLibObjects(const QString& libName, const QStringList& list, ProjectModel& model)
+    {
+        std::vector<size_t> indexesToSources;
+        for (auto it = list.begin() + 3; it != list.end(); ++it) {
+            for (size_t i = 0; i < model.units.size(); i++) {
+                if (model.units[i].objectFile == *it) {
+                    indexesToSources.push_back(i);
+                }
+            }
+        }
+        model.relations[libName.toStdString()] = indexesToSources;
+    }
+
 }  // namespace
 
-CompileUnit GccCompilerParser::parse(const QString& compileLine) const
+CompileUnit GccCompilerParser::parse(const QString& compileLine, ProjectModel &model) const
 {
     QStringList list = compileLine.split(QRegExp("\\s+"), QString::SkipEmptyParts);
     assertGccTools(list.first());
@@ -47,18 +62,25 @@ CompileUnit GccCompilerParser::parse(const QString& compileLine) const
     } else {
         const int indexC = list.indexOf("-c");
         const int indexShared = list.indexOf("-shared");
+        const int indexStatic = list.indexOf("qc");
         if (indexShared != -1) {
             ret.name = list.at(indexShared + 1).split(",").last();
             ret.type = UnitType::SHARED_LIBRARY;
         } else if (indexC != -1) {
             ret.name = list.at(indexC + 1);
             ret.type = UnitType::SOURCE_FILE;
-        } else {
+        } else if (indexStatic != -1){
             // In gcc we have something like: /usr/bin/ar qc path/to/lib.a
-            ret.name = list.at(2).split("/").last();
+            ret.name = list.at(indexStatic + 1).split("/").last();
             ret.type = UnitType::STATIC_LIBRARY;
+            addStaticLibObjects(ret.name, list, model);
+        } else {
+            ret.type = UnitType::UNKNOWN;
+            return ret;
         }
     }
+
+    model.units.push_back(ret);
 
     return ret;
 }

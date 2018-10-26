@@ -22,5 +22,5 @@
 
 class GccCompilerParser : public ICompilerParser {
 public:
-    virtual CompileUnit parse(const QString &compileLine) const override;
+    virtual CompileUnit parse(const QString &compileLine, ProjectModel& model) const override;
 };

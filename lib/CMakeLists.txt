@@ -11,7 +11,7 @@ set(PRIVATE_SOURCES
     src/TranslationUnit.cpp
     src/CompilerParserFactory.cpp
     src/DataParser.cpp
-    src/GccCompilerInterface.cpp
+    src/GccCompilerParser.cpp
     src/GccCompilerParser.h
     src/utils.cpp
 )
